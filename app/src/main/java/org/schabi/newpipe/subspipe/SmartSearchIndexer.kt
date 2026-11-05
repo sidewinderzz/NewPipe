@@ -19,20 +19,18 @@ import org.schabi.newpipe.extractor.stream.Description
 import org.schabi.newpipe.local.feed.FeedDatabaseManager
 import org.schabi.newpipe.local.feed.service.FeedEventManager
 import org.schabi.newpipe.util.ExtractorHelper
-import org.schabi.newpipe.util.ListHelper
 
 /**
  * Keeps two things up to date for feed search:
  * 1. topic tags for every subscribed channel, written by an AI model once per channel
  *    (only when an AI key is set in Settings > Smart search);
- * 2. video descriptions, fetched newest first, only on Wi-Fi, and rate limited to go easy
- *    on YouTube.
+ * 2. video descriptions, fetched newest first and rate limited to go easy on YouTube.
  */
 object SmartSearchIndexer {
     private const val TAG = "SmartSearchIndexer"
 
     /** How many descriptions to fetch per feed refresh. The rest follow on later refreshes. */
-    private const val MAX_DESCRIPTION_FETCHES_PER_RUN = 150
+    private const val MAX_DESCRIPTION_FETCHES_PER_RUN = 400
 
     /** Pause between description fetches. */
     private const val DELAY_BETWEEN_FETCHES_MS = 500L
@@ -169,9 +167,7 @@ object SmartSearchIndexer {
             if (fetched >= MAX_DESCRIPTION_FETCHES_PER_RUN ||
                 consecutiveFailures >= MAX_CONSECUTIVE_FAILURES ||
                 // never compete with a feed refresh for the network; carry on next time
-                FeedEventManager.isLoading() ||
-                // only on Wi-Fi (or another unmetered network), to save mobile data and battery
-                ListHelper.isMeteredNetwork(context)
+                FeedEventManager.isLoading()
             ) {
                 break
             }

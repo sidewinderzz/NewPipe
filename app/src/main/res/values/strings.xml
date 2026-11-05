@@ -33,7 +33,7 @@
     <string name="subscription_change_failed">Could not change subscription</string>
     <string name="subscription_update_failed">Could not update subscription</string>
     <string name="show_info">Show info</string>
-    <string name="tab_subscriptions">Channels</string>
+    <string name="tab_subscriptions">Subscriptions</string>
     <string name="tab_bookmarks">Bookmarked Playlists</string>
     <string name="tab_bookmarks_short">Playlists</string>
     <string name="tab_choose">Choose Tab</string>
@@ -708,7 +708,7 @@
         <item quantity="other">%d days</item>
     </plurals>
     <!-- Feed -->
-    <string name="fragment_feed_title">Feed</string>
+    <string name="fragment_feed_title">Home</string>
     <string name="feed_group_page_summary">Channel group page</string>
     <string name="feed_groups_header_title">Channel groups</string>
     <string name="feed_oldest_subscription_update">Feed last updated: %s</string>
