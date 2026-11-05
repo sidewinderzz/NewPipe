@@ -9,6 +9,7 @@
     <string name="subspipe_update_now" translatable="false">Update</string>
     <string name="subspipe_update_later" translatable="false">Later</string>
     <string name="subspipe_update_downloading" translatable="false">Downloading the update…</string>
+    <string name="subspipe_update_download_failed" translatable="false">The update didn\'t download. Try again from Settings > Updates.</string>
     <string name="subspipe_up_to_date" translatable="false">SubsPipe is up to date</string>
     <string name="subspipe_new_group" translatable="false">New group</string>
     <string name="subspipe_accent_key" translatable="false">subspipe_accent</string>

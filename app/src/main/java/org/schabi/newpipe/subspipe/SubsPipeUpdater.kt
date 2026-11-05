@@ -143,7 +143,13 @@ object SubsPipeUpdater {
                     return
                 }
                 context.unregisterReceiver(this)
-                val uri = downloadManager.getUriForDownloadedFile(downloadId) ?: return
+                val uri = downloadManager.getUriForDownloadedFile(downloadId)
+                if (uri == null) {
+                    // the download failed or was cancelled
+                    Toast.makeText(context, R.string.subspipe_update_download_failed, Toast.LENGTH_LONG)
+                        .show()
+                    return
+                }
                 val install = Intent(Intent.ACTION_VIEW)
                     .setDataAndType(uri, APK_MIME)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -5,6 +5,9 @@
     <color name="defaultIconTint">@color/black</color>
 
     <color name="ic_launcher_background">#0F0F0F</color>
+    <color name="subspipe_launcher_background">#E5202E</color>
+    <color name="subspipe_splash_light">#FFFFFF</color>
+    <color name="subspipe_splash_dark">#0F0F0F</color>
 
     <color name="placeholder_background">#999999</color>
     <color name="placeholder_foreground">#6C6C6C</color>

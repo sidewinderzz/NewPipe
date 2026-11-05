@@ -29,7 +29,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="12dp"
-                android:src="@drawable/splash_foreground"
+                android:src="@drawable/subspipe_logo"
                 tools:ignore="ContentDescription" />
 
             <org.schabi.newpipe.views.NewPipeTextView
