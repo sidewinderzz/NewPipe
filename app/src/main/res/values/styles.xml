@@ -158,17 +158,40 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <!-- SubsPipe: highlight color overlays (applied on top of the theme) -->
+    <style name="SubsPipeAccent" />
+    <style name="SubsPipeAccent.Blue">
+        <item name="colorPrimary">@color/subspipe_accent_blue</item>
+        <item name="colorControlActivated">@color/subspipe_accent_blue</item>
+    </style>
+    <style name="SubsPipeAccent.Green">
+        <item name="colorPrimary">@color/subspipe_accent_green</item>
+        <item name="colorControlActivated">@color/subspipe_accent_green</item>
+    </style>
+    <style name="SubsPipeAccent.Orange">
+        <item name="colorPrimary">@color/subspipe_accent_orange</item>
+        <item name="colorControlActivated">@color/subspipe_accent_orange</item>
+    </style>
+    <style name="SubsPipeAccent.Purple">
+        <item name="colorPrimary">@color/subspipe_accent_purple</item>
+        <item name="colorControlActivated">@color/subspipe_accent_purple</item>
+    </style>
+    <style name="SubsPipeAccent.Teal">
+        <item name="colorPrimary">@color/subspipe_accent_teal</item>
+        <item name="colorControlActivated">@color/subspipe_accent_teal</item>
+    </style>
+
     <!-- Settings -->
     <style name="LightSettingsTheme" parent="LightTheme">
-        <item name="colorAccent">@color/light_settings_accent_color</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
     </style>
 
     <style name="DarkSettingsTheme" parent="DarkTheme">
-        <item name="colorAccent">@color/dark_settings_accent_color</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
     </style>
 
     <style name="BlackSettingsTheme" parent="BlackTheme">
-        <item name="colorAccent">@color/black_settings_accent_color</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
     </style>
 
     <!-- Router Activity -->

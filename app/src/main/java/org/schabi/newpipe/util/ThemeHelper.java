@@ -73,6 +73,39 @@ public final class ThemeHelper {
      */
     public static void setTheme(final Context context, final int serviceId) {
         context.setTheme(getThemeForService(context, serviceId));
+        applySubsPipeAccent(context);
+    }
+
+    /**
+     * SubsPipe: tints progress bars, switches and other highlights with the color picked
+     * in Appearance settings. Red keeps the theme's own colors.
+     *
+     * @param context the context whose theme gets the highlight color
+     */
+    public static void applySubsPipeAccent(final Context context) {
+        final String accent = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.subspipe_accent_key), "red");
+        final int overlay;
+        switch (accent) {
+            case "blue":
+                overlay = R.style.SubsPipeAccent_Blue;
+                break;
+            case "green":
+                overlay = R.style.SubsPipeAccent_Green;
+                break;
+            case "orange":
+                overlay = R.style.SubsPipeAccent_Orange;
+                break;
+            case "purple":
+                overlay = R.style.SubsPipeAccent_Purple;
+                break;
+            case "teal":
+                overlay = R.style.SubsPipeAccent_Teal;
+                break;
+            default:
+                return;
+        }
+        context.getTheme().applyStyle(overlay, true);
     }
 
     /**

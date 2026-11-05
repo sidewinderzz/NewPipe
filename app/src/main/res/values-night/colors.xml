@@ -5,4 +5,5 @@
     <!-- SubsPipe: dialog / popup surfaces -->
     <color name="subspipe_surface_color">#212121</color>
     <color name="subspipe_selected_fill_color">#26FFFFFF</color>
+    <color name="subspipe_chip_outline_color">#4DFFFFFF</color>
 </resources>

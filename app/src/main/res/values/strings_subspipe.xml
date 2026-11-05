@@ -10,4 +10,24 @@
     <string name="subspipe_update_later" translatable="false">Later</string>
     <string name="subspipe_update_downloading" translatable="false">Downloading the update…</string>
     <string name="subspipe_up_to_date" translatable="false">SubsPipe is up to date</string>
+    <string name="subspipe_new_group" translatable="false">New group</string>
+    <string name="subspipe_accent_key" translatable="false">subspipe_accent</string>
+    <string name="subspipe_accent_title" translatable="false">Highlight color</string>
+    <string name="subspipe_accent_summary" translatable="false">Color of progress bars, switches and other highlights</string>
+    <string-array name="subspipe_accent_values" translatable="false">
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>orange</item>
+        <item>purple</item>
+        <item>teal</item>
+    </string-array>
+    <string-array name="subspipe_accent_names" translatable="false">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Orange</item>
+        <item>Purple</item>
+        <item>Teal</item>
+    </string-array>
 </resources>

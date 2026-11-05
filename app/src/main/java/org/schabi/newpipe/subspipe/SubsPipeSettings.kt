@@ -7,6 +7,7 @@ package org.schabi.newpipe.subspipe
 
 import android.content.Context
 import androidx.preference.PreferenceGroup
+import androidx.preference.PreferenceManager
 import org.schabi.newpipe.R
 
 /**
@@ -47,6 +48,27 @@ object SubsPipeSettings {
     @JvmStatic
     fun isHidden(context: Context, key: String?): Boolean =
         key != null && key in hiddenKeys(context)
+
+    private const val DEFAULTS_VERSION_KEY = "subspipe_defaults_version"
+    private const val DEFAULTS_VERSION = 1
+
+    /**
+     * Applies the defaults chosen for SubsPipe once per install (and again only when
+     * [DEFAULTS_VERSION] goes up), so later changes made in settings are kept.
+     */
+    @JvmStatic
+    fun applyDefaultsOnce(context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        if (prefs.getInt(DEFAULTS_VERSION_KEY, 0) >= DEFAULTS_VERSION) {
+            return
+        }
+        prefs.edit()
+            // Under a video: no YouTube recommendations, no info boxes
+            .putBoolean(context.getString(R.string.show_next_video_key), false)
+            .putBoolean(context.getString(R.string.show_meta_info_key), false)
+            .putInt(DEFAULTS_VERSION_KEY, DEFAULTS_VERSION)
+            .apply()
+    }
 
     /** Hides every SubsPipe-hidden preference inside [group], at any depth. */
     @JvmStatic

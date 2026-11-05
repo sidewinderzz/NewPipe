@@ -10,13 +10,11 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import org.schabi.newpipe.info_list.ItemViewMode
 import org.schabi.newpipe.local.feed.FeedDatabaseManager
 import org.schabi.newpipe.local.subscription.item.ChannelItem
 import org.schabi.newpipe.local.subscription.item.FeedGroupCardGridItem
 import org.schabi.newpipe.local.subscription.item.FeedGroupCardItem
 import org.schabi.newpipe.util.DEFAULT_THROTTLE_TIMEOUT
-import org.schabi.newpipe.util.ThemeHelper.getItemViewMode
 
 class SubscriptionViewModel(application: Application) : AndroidViewModel(application) {
     private var feedDatabaseManager: FeedDatabaseManager = FeedDatabaseManager(application)
@@ -96,9 +94,11 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
          *
          *  @see [SubscriptionViewModel.shouldUseGridForSubscription] to modify Layout Manager
          */
+        @Suppress("UNUSED_PARAMETER")
         fun shouldUseGridForSubscription(context: Context): Boolean {
-            val itemViewMode = getItemViewMode(context)
-            return itemViewMode == ItemViewMode.GRID || itemViewMode == ItemViewMode.CARD
+            // SubsPipe: channels are always a compact list (small avatar + name), and
+            // channel groups are always a row of chips, whatever the list view mode is.
+            return false
         }
     }
 }

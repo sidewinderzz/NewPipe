@@ -22,8 +22,7 @@ public final class TabsJsonHelper {
     // SubsPipe: open straight to the subscription feed, no trending/kiosk tab
     private static final List<Tab> FALLBACK_INITIAL_TABS_LIST = List.of(
             Tab.Type.FEED.getTab(),
-            Tab.Type.SUBSCRIPTIONS.getTab(),
-            Tab.Type.BOOKMARKS.getTab());
+            Tab.Type.SUBSCRIPTIONS.getTab());
 
     private TabsJsonHelper() { }
 
@@ -58,6 +57,8 @@ public final class TabsJsonHelper {
             final var returnTabs = tabsArray.streamAsJsonObjects()
                     .map(Tab::from)
                     .filter(Objects::nonNull)
+                    // SubsPipe: no bookmarked-playlists tab
+                    .filter(tab -> tab.getTabId() != Tab.Type.BOOKMARKS.getTabId())
                     .collect(Collectors.toUnmodifiableList());
 
             return returnTabs.isEmpty() ? getDefaultTabs() : returnTabs;
