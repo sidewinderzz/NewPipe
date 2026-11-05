@@ -23,6 +23,8 @@ object SubsPipeSettings {
 
         // Content: other services, YouTube-wide search and the editable main tabs
         R.string.main_page_content_key,
+        // only changes which country's Trending page is shown, and Trending is gone
+        R.string.content_country_key,
         R.string.peertube_instance_setup_key,
         R.string.show_search_suggestions_key,
 

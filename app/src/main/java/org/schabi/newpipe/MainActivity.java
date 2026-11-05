@@ -124,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
     /** SubsPipe: hide Trending and the other kiosks from the drawer. */
     private static final boolean SHOW_KIOSKS_IN_DRAWER = false;
+    /** SubsPipe: hide NewPipe's own announcement popups on launch. */
+    private static final boolean SHOW_NEWPIPE_POPUPS = false;
 
     private static final int ITEM_ID_SUBSCRIPTIONS = -1;
     private static final int ITEM_ID_FEED = -2;
@@ -200,20 +202,20 @@ public class MainActivity extends AppCompatActivity {
             // if this is enabled by the user.
             NotificationWorker.initialize(this);
         }
-        if (!UpdateSettingsFragment.wasUserAskedForConsent(this)
-                && !App.getInstance().isFirstRun()
-                && ReleaseVersionUtil.INSTANCE.isReleaseApk()) {
-            UpdateSettingsFragment.askForConsentToUpdateChecks(this);
+        // SubsPipe: no NewPipe announcement popups (update-check consent, "Keep Android Open",
+        // Android 5 notice, NewPipe migration notes). SubsPipe checks its own GitHub releases.
+        if (SHOW_NEWPIPE_POPUPS) {
+            if (!UpdateSettingsFragment.wasUserAskedForConsent(this)
+                    && !App.getInstance().isFirstRun()
+                    && ReleaseVersionUtil.INSTANCE.isReleaseApk()) {
+                UpdateSettingsFragment.askForConsentToUpdateChecks(this);
+            }
+            if (!DEBUG) {
+                showKeepAndroidDialog();
+                showApi23RequirementDialog();
+            }
+            MigrationManager.showUserInfoIfPresent(this);
         }
-
-        // ReleaseVersionUtil.INSTANCE.isReleaseApk() will be true only for main official build
-        // We want every release build (nightly, nightly-refactor) to show the popup
-        if (!DEBUG) {
-            showKeepAndroidDialog();
-            showApi23RequirementDialog();
-        }
-
-        MigrationManager.showUserInfoIfPresent(this);
     }
 
     @Override
@@ -286,6 +288,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDrawerMenuForCurrentService() throws ExtractionException {
         //Tabs
+        // SubsPipe: Feed first, then Channels
+        drawerLayoutBinding.navigation.getMenu()
+                .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
+                .setIcon(R.drawable.ic_subscriptions);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_SUBSCRIPTIONS, ORDER,
                         R.string.tab_subscriptions)
@@ -295,9 +301,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.menu_tabs_group, ITEM_ID_ADD_SUBSCRIPTIONS, ORDER,
                         R.string.subspipe_add_subscriptions)
                 .setIcon(R.drawable.ic_search_add);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
-                .setIcon(R.drawable.ic_subscriptions);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_DOWNLOADS, ORDER, R.string.downloads)
                 .setIcon(R.drawable.ic_file_download);

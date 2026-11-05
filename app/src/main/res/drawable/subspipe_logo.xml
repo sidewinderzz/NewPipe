@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe app icon: a stack of videos with a play button -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#E5202E"
+        android:pathData="M11,0H37A11,11 0 0 1 48,11V37A11,11 0 0 1 37,48H11A11,11 0 0 1 0,37V11A11,11 0 0 1 11,0Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M15.41,10.25H32.59A1.41,1.41 0 0 1 34,11.66V11.66A1.41,1.41 0 0 1 32.59,13.06H15.41A1.41,1.41 0 0 1 14,11.66V11.66A1.41,1.41 0 0 1 15.41,10.25Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14.62,15.25H33.38A5.62,5.62 0 0 1 39,20.88V32.12A5.62,5.62 0 0 1 33.38,37.75H14.62A5.62,5.62 0 0 1 9,32.12V20.88A5.62,5.62 0 0 1 14.62,15.25Z" />
+    <path
+        android:fillColor="#E5202E"
+        android:pathData="M20.25,20.56L20.25,32.44L29.62,26.5Z" />
+</vector>

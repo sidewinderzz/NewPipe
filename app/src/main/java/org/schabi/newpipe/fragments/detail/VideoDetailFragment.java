@@ -627,6 +627,8 @@ public final class VideoDetailFragment
 
         binding.detailThumbnailRootLayout.requestFocus();
 
+        // SubsPipe: no "Open in browser" button
+        binding.detailControlsOpenInBrowser.setVisibility(View.GONE);
         binding.detailControlsPlayWithKodi.setVisibility(
                 KoreUtils.shouldShowPlayWithKodi(requireContext(), serviceId)
                         ? View.VISIBLE
