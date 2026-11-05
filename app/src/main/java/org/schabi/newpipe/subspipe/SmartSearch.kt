@@ -18,7 +18,7 @@ import org.schabi.newpipe.database.stream.StreamWithState
  */
 object SmartSearch {
     /** Minimum meaning-similarity for a video to show up without matching all words. */
-    private const val MIN_SIMILARITY = 0.25f
+    private const val MIN_SIMILARITY = 0.2f
 
     /**
      * How much a channel's overall topic counts. A search for a topic a channel is all
