@@ -44,7 +44,7 @@ configure<ApplicationExtension> {
         applicationId = SUBSPIPE_APPLICATION_ID
         resValue("string", "app_name", "SubsPipe")
         minSdk {
-            // SubsPipe: the on-device smart search model (MediaPipe) needs Android 7+
+            // SubsPipe: Android 7+
             version = release(SUBSPIPE_VERSION_SDK_MIN)
         }
         targetSdk {
@@ -142,8 +142,6 @@ configure<ApplicationExtension> {
 
     androidResources {
         generateLocaleConfig = true
-        // SubsPipe: the smart search model is memory-mapped, so it must stay uncompressed
-        noCompress += "tflite"
     }
 
     buildFeatures {
@@ -295,9 +293,6 @@ dependencies {
     // HTTP client
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.okhttp.brotli)
-
-    // SubsPipe: on-device text embeddings for smart search
-    implementation(libs.google.mediapipe.tasks.text)
 
     // Media player
     implementation(libs.google.exoplayer.core)

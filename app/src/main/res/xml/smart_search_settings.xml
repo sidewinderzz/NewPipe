@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/subspipe_smart_search_title">
+
+    <Preference
+        android:key="subspipe_smart_search_status"
+        android:selectable="false"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+    <EditTextPreference
+        android:key="subspipe_ai_key"
+        android:title="@string/subspipe_ai_key_title"
+        android:dialogMessage="@string/subspipe_ai_key_help"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="subspipe_tag_now"
+        android:title="@string/subspipe_tag_now_title"
+        android:summary="@string/subspipe_tag_now_summary"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="subspipe_channel_topics"
+        android:title="@string/subspipe_channel_topics_title"
+        android:summary="@string/subspipe_channel_topics_summary"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="subspipe_redo_tags"
+        android:title="@string/subspipe_redo_tags_title"
+        android:summary="@string/subspipe_redo_tags_summary"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>
