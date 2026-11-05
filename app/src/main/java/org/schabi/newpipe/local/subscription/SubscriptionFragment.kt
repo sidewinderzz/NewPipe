@@ -119,12 +119,12 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         activity.supportActionBar?.setDisplayShowTitleEnabled(true)
         activity.supportActionBar?.setTitle(R.string.tab_subscriptions)
 
-        // SubsPipe: the only way to search YouTube is to find channels to subscribe to
-        menu.add(R.string.subspipe_find_channels)
+        // SubsPipe: find channels to subscribe to, or import a list
+        menu.add(R.string.subspipe_add_subscriptions)
             .setIcon(R.drawable.ic_search_add)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
-                NavigationHelper.openChannelSearchFragment(fm, ServiceHelper.getSelectedServiceId(requireContext()))
+                NavigationHelper.openAddSubscriptionsFragment(fm)
                 true
             }
 

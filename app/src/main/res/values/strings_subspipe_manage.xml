@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe: "Add subscriptions" screen -->
+<resources>
+    <string name="subspipe_add_subscriptions" translatable="false">Add subscriptions</string>
+    <string name="subspipe_channel_search_hint" translatable="false">Search YouTube channels, or paste a link or @handle</string>
+    <string name="subspipe_channel_search_intro" translatable="false">Find a YouTuber by name, @handle or channel link and tap Subscribe. This only searches for channels, your feed search stays limited to your subscriptions.</string>
+    <string name="subspipe_subscribe" translatable="false">Subscribe</string>
+    <string name="subspipe_subscribed" translatable="false">Subscribed</string>
+    <string name="subspipe_subscribed_toast" translatable="false">Subscribed to %1$s. Pull down on the feed to load their videos.</string>
+    <string name="subspipe_unsubscribed_toast" translatable="false">Unsubscribed from %1$s</string>
+    <string name="subspipe_searching" translatable="false">Searching…</string>
+    <string name="subspipe_no_channels_found" translatable="false">No channels found</string>
+    <string name="subspipe_search_failed" translatable="false">Search failed. Check your connection and try again.</string>
+    <string name="subspipe_import_header" translatable="false">Import a list</string>
+    <string name="subspipe_import_csv" translatable="false">Import YouTube CSV</string>
+    <string name="subspipe_import_csv_summary" translatable="false">The subscriptions.csv file from Google Takeout. Channels you already follow are skipped.</string>
+    <string name="subspipe_import_backup" translatable="false">Restore a backup</string>
+    <string name="subspipe_import_backup_summary" translatable="false">A .json subscriptions export from SubsPipe or NewPipe.</string>
+    <string name="subspipe_takeout_help" translatable="false">To get the CSV: open takeout.google.com, choose only YouTube, under \"All YouTube data included\" pick just subscriptions, and export.</string>
+    <string name="subspipe_open_takeout" translatable="false">Open Google Takeout</string>
+    <string name="subspipe_subscription_count" translatable="false">You follow %1$d channels</string>
+    <string name="subspipe_clear_search" translatable="false">Clear search</string>
+</resources>
