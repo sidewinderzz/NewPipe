@@ -65,3 +65,5 @@
 -dontwarn com.google.protobuf.**
 -dontwarn com.google.auto.value.**
 -dontwarn javax.annotation.**
+-dontwarn javax.lang.model.**
+-dontwarn autovalue.shaded.**
