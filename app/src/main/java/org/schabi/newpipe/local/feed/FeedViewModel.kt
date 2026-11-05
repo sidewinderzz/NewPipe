@@ -15,7 +15,6 @@ import io.reactivex.rxjava3.functions.Function7
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.time.OffsetDateTime
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 import org.schabi.newpipe.App
 import org.schabi.newpipe.R
@@ -27,6 +26,8 @@ import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.ErrorResultE
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.IdleEvent
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.ProgressEvent
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.SuccessResultEvent
+import org.schabi.newpipe.subspipe.SmartSearch
+import org.schabi.newpipe.subspipe.SmartSearchIndexer
 import org.schabi.newpipe.util.DEFAULT_THROTTLE_TIMEOUT
 
 class FeedViewModel(
@@ -91,11 +92,12 @@ class FeedViewModel(
         .observeOn(Schedulers.io())
         .map { (event, showPlayedItems, showPartiallyPlayedItems, showFutureItems, notLoadedCount, oldestUpdate, query) ->
             val streamItems = if (event is SuccessResultEvent || event is IdleEvent) {
-                val terms = searchTerms(query)
-                feedDatabaseManager
+                val allItems = feedDatabaseManager
                     .getStreams(groupId, showPlayedItems, showPartiallyPlayedItems, showFutureItems)
                     .blockingGet(arrayListOf())
-                    .filter { matchesSearch(it, terms) }
+                // SubsPipe: keep the smart search index up to date with the feed
+                SmartSearchIndexer.indexInBackground(application, allItems.map { it.stream })
+                SmartSearch.search(application, allItems, query)
             } else {
                 arrayListOf()
             }
@@ -141,8 +143,8 @@ class FeedViewModel(
     )
 
     /**
-     * SubsPipe: filter the feed (your subscriptions only) by words in the
-     * video title or channel name. Every word has to match, in any order.
+     * SubsPipe: search the feed (your subscriptions only). Results are ranked by
+     * meaning with the on-device model, see [SmartSearch].
      */
     fun setSearchQuery(query: String) {
         searchQuery.onNext(query.trim())
@@ -176,19 +178,6 @@ class FeedViewModel(
     fun getShowFutureItemsFromPreferences() = getShowFutureItemsFromPreferences(application)
 
     companion object {
-        private fun searchTerms(query: String): List<String> = query
-            .lowercase(Locale.getDefault())
-            .split(Regex("\\s+"))
-            .filter { it.isNotBlank() }
-
-        private fun matchesSearch(item: StreamWithState, terms: List<String>): Boolean {
-            if (terms.isEmpty()) {
-                return true
-            }
-            val haystack = "${item.stream.title} ${item.stream.uploader}".lowercase(Locale.getDefault())
-            return terms.all { haystack.contains(it) }
-        }
-
         private fun getShowPlayedItemsFromPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean(context.getString(R.string.feed_show_watched_items_key), true)
 

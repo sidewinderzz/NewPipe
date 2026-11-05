@@ -57,3 +57,11 @@
 
 # See https://github.com/TeamNewPipe/NewPipe/issues/13508
 -keep class org.ocpsoft.prettytime.i18n.Resources* { *; }
+
+# SubsPipe: MediaPipe text embedder (smart search) uses JNI and protobuf reflection
+-keep class com.google.mediapipe.** { *; }
+-keep class com.google.protobuf.** { *; }
+-dontwarn com.google.mediapipe.**
+-dontwarn com.google.protobuf.**
+-dontwarn com.google.auto.value.**
+-dontwarn javax.annotation.**

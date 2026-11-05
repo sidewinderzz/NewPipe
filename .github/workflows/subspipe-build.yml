@@ -46,6 +46,13 @@ jobs:
             echo "::warning::No SUBSPIPE_KEYSTORE_BASE64 secret, signing with a temporary debug key"
           fi
 
+      - name: Download smart search model
+        run: |
+          mkdir -p app/src/main/assets
+          curl -fsSL --retry 3 -o app/src/main/assets/universal_sentence_encoder.tflite \
+            https://storage.googleapis.com/mediapipe-models/text_embedder/universal_sentence_encoder/float32/latest/universal_sentence_encoder.tflite
+          ls -la app/src/main/assets/universal_sentence_encoder.tflite
+
       - name: Build release APK
         env:
           SUBSPIPE_KEYSTORE_PASSWORD: ${{ secrets.SUBSPIPE_KEYSTORE_PASSWORD }}
