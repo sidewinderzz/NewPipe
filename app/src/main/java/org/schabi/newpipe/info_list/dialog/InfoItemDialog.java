@@ -324,8 +324,8 @@ public final class InfoItemDialog {
             addAllEntries(
                     StreamDialogDefaultEntry.DOWNLOAD,
                     StreamDialogDefaultEntry.APPEND_PLAYLIST,
-                    StreamDialogDefaultEntry.SHARE,
-                    StreamDialogDefaultEntry.OPEN_IN_BROWSER
+                    StreamDialogDefaultEntry.SHARE
+                    // SubsPipe: no "Open in browser"
             );
             addPlayWithKodiEntryIfNeeded();
             addMarkAsWatchedEntryIfNeeded();

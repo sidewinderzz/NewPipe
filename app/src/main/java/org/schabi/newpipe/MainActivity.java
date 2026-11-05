@@ -83,6 +83,7 @@ import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
+import org.schabi.newpipe.subspipe.SubsPipeSettings;
 import org.schabi.newpipe.subspipe.SubsPipeUpdater;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
@@ -223,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
 
         // SubsPipe: look for a newer build on GitHub
         SubsPipeUpdater.INSTANCE.checkInBackground(this, false);
+        // SubsPipe: one-time defaults picked by the user (can be changed in settings)
+        SubsPipeSettings.applyDefaultsOnce(this);
 
         if (sharedPreferences.getBoolean(app.getString(R.string.update_app_key), false)
                 && sharedPreferences
@@ -323,9 +326,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_SETTINGS, ORDER, R.string.settings)
                 .setIcon(R.drawable.ic_settings);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_ABOUT, ORDER, R.string.tab_about)
-                .setIcon(R.drawable.ic_info_outline);
     }
 
     private boolean drawerItemSelected(final MenuItem item) {

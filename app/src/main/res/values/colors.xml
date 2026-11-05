@@ -57,6 +57,13 @@
     <color name="subspipe_selected_fill_color">#1A000000</color>
     <color name="subspipe_chip_outline_color">#33000000</color>
 
+    <!-- SubsPipe: highlight color choices -->
+    <color name="subspipe_accent_blue">#3EA6FF</color>
+    <color name="subspipe_accent_green">#2BA640</color>
+    <color name="subspipe_accent_orange">#F57C00</color>
+    <color name="subspipe_accent_purple">#8E5CF7</color>
+    <color name="subspipe_accent_teal">#00A3A3</color>
+
     <!-- Miscellaneous -->
     <color name="queue_background_color">@color/dark_queue_background_color</color>
     <color name="drawer_header_font_color">#F2FFFFFF</color>

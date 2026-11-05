@@ -23,6 +23,16 @@
         app:singleLineTitle="false"
         app:iconSpaceReserved="false" />
 
+    <ListPreference
+        android:defaultValue="red"
+        android:entries="@array/subspipe_accent_names"
+        android:entryValues="@array/subspipe_accent_values"
+        android:key="@string/subspipe_accent_key"
+        android:title="@string/subspipe_accent_title"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="@string/show_hold_to_append_key"

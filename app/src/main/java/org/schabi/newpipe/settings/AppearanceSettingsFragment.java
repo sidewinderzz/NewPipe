@@ -34,6 +34,20 @@ public class AppearanceSettingsFragment extends BasePreferenceFragment {
             return false;
         });
 
+        // SubsPipe: highlight color, applied by recreating the screens
+        findPreference(getString(R.string.subspipe_accent_key))
+                .setOnPreferenceChangeListener((preference, newValue) -> {
+                    defaultPreferences.edit()
+                            .putBoolean(Constants.KEY_THEME_CHANGE, true)
+                            .putString(getString(R.string.subspipe_accent_key),
+                                    newValue.toString())
+                            .apply();
+                    if (getActivity() != null) {
+                        ActivityCompat.recreate(getActivity());
+                    }
+                    return false;
+                });
+
         final String nightThemeKey = getString(R.string.night_theme_key);
         if (startThemeKey.equals(autoDeviceThemeKey)) {
             final String startNightThemeKey = defaultPreferences
