@@ -69,6 +69,7 @@ import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.player.playqueue.PlayQueueItem;
 import org.schabi.newpipe.settings.SettingsActivity;
+import org.schabi.newpipe.subspipe.AddSubscriptionsFragment;
 import org.schabi.newpipe.util.external_communication.ShareUtils;
 
 import java.util.List;
@@ -397,6 +398,18 @@ public final class NavigationHelper {
         defaultTransaction(fragmentManager)
                 .replace(R.id.fragment_holder, SearchFragment.getChannelSearchInstance(serviceId))
                 .addToBackStack(SEARCH_FRAGMENT_TAG)
+                .commit();
+    }
+
+    /**
+     * SubsPipe: open the screen for finding channels to subscribe to and importing a list.
+     *
+     * @param fragmentManager the fragment manager
+     */
+    public static void openAddSubscriptionsFragment(final FragmentManager fragmentManager) {
+        defaultTransaction(fragmentManager)
+                .replace(R.id.fragment_holder, AddSubscriptionsFragment.newInstance())
+                .addToBackStack(null)
                 .commit();
     }
 

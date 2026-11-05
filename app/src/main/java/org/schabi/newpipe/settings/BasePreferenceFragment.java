@@ -12,6 +12,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import org.schabi.newpipe.MainActivity;
+import org.schabi.newpipe.subspipe.SubsPipeSettings;
 import org.schabi.newpipe.util.ThemeHelper;
 
 import java.util.Objects;
@@ -38,6 +39,8 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat {
                               @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
         setDivider(null);
+        // SubsPipe: hide settings that don't apply to a subscriptions-only app
+        SubsPipeSettings.prune(requireContext(), getPreferenceScreen());
         ThemeHelper.setTitleToAppCompatActivity(getActivity(), getPreferenceScreen().getTitle());
     }
 

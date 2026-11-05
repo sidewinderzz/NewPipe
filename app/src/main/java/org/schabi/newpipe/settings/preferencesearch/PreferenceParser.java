@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 import androidx.preference.PreferenceManager;
 
+import org.schabi.newpipe.subspipe.SubsPipeSettings;
 import org.schabi.newpipe.util.Localization;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -60,7 +61,8 @@ public class PreferenceParser {
 
                     if (!searchConfiguration.getParserIgnoreElements().contains(xpp.getName())
                             && result.hasData()
-                            && !"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))) {
+                            && !"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))
+                            && !SubsPipeSettings.isHidden(context, result.getKey())) {
                         results.add(result);
                     }
                     if (searchConfiguration.getParserContainerElements().contains(xpp.getName())) {

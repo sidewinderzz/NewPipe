@@ -2,4 +2,7 @@
 <resources>
     <color name="contrastColor">@color/white</color>
     <color name="defaultIconTint">@color/white</color>
+    <!-- SubsPipe: dialog / popup surfaces -->
+    <color name="subspipe_surface_color">#212121</color>
+    <color name="subspipe_selected_fill_color">#26FFFFFF</color>
 </resources>

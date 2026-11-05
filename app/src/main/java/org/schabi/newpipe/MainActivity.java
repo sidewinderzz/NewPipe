@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ITEM_ID_BOOKMARKS = -3;
     private static final int ITEM_ID_DOWNLOADS = -4;
     private static final int ITEM_ID_HISTORY = -5;
+    private static final int ITEM_ID_ADD_SUBSCRIPTIONS = -6;
     private static final int ITEM_ID_SETTINGS = 0;
     private static final int ITEM_ID_DONATION = 1;
     private static final int ITEM_ID_ABOUT = 2;
@@ -286,6 +287,11 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.menu_tabs_group, ITEM_ID_SUBSCRIPTIONS, ORDER,
                         R.string.tab_subscriptions)
                 .setIcon(R.drawable.ic_tv);
+        // SubsPipe: find channels to subscribe to, or import a list
+        drawerLayoutBinding.navigation.getMenu()
+                .add(R.id.menu_tabs_group, ITEM_ID_ADD_SUBSCRIPTIONS, ORDER,
+                        R.string.subspipe_add_subscriptions)
+                .setIcon(R.drawable.ic_search_add);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
                 .setIcon(R.drawable.ic_subscriptions);
@@ -320,10 +326,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_SETTINGS, ORDER, R.string.settings)
                 .setIcon(R.drawable.ic_settings);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_DONATION, ORDER,
-                        R.string.donation_title)
-                .setIcon(R.drawable.volunteer_activism_ic);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_ABOUT, ORDER, R.string.tab_about)
                 .setIcon(R.drawable.ic_info_outline);
@@ -365,6 +367,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case ITEM_ID_SUBSCRIPTIONS:
                 NavigationHelper.openSubscriptionFragment(getSupportFragmentManager());
+                break;
+            case ITEM_ID_ADD_SUBSCRIPTIONS:
+                NavigationHelper.openAddSubscriptionsFragment(getSupportFragmentManager());
                 break;
             case ITEM_ID_FEED:
                 NavigationHelper.openFeedFragment(getSupportFragmentManager());
@@ -409,7 +414,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerHeader() {
-        drawerHeaderBinding.drawerHeaderActionButton.setOnClickListener(view -> toggleServices());
+        // SubsPipe: YouTube only, so the header no longer opens the list of services
+        drawerHeaderBinding.drawerHeaderActionButton.setClickable(false);
+        drawerHeaderBinding.drawerHeaderActionButton.setFocusable(false);
 
         // If the current app name is bigger than the default "NewPipe" (7 chars),
         // let the text view grow a little more as well.
