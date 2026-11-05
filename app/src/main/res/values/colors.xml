@@ -52,6 +52,9 @@
     <!-- SubsPipe: YouTube-style top bars -->
     <color name="subspipe_dark_bar_color">#0F0F0F</color>
     <color name="subspipe_black_bar_color">#000000</color>
+    <!-- SubsPipe: dialog / popup surfaces (night variant in values-night) -->
+    <color name="subspipe_surface_color">#FFFFFF</color>
+    <color name="subspipe_selected_fill_color">#1A000000</color>
 
     <!-- Miscellaneous -->
     <color name="queue_background_color">@color/dark_queue_background_color</color>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe: rounded background for popup and overflow menus -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="12dp" />
+    <solid android:color="@color/subspipe_surface_color" />
+    <padding
+        android:bottom="6dp"
+        android:top="6dp" />
+</shape>

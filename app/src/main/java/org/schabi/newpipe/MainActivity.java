@@ -321,10 +321,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.menu_options_about_group, ITEM_ID_SETTINGS, ORDER, R.string.settings)
                 .setIcon(R.drawable.ic_settings);
         drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_DONATION, ORDER,
-                        R.string.donation_title)
-                .setIcon(R.drawable.volunteer_activism_ic);
-        drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_ABOUT, ORDER, R.string.tab_about)
                 .setIcon(R.drawable.ic_info_outline);
     }
@@ -409,7 +405,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerHeader() {
-        drawerHeaderBinding.drawerHeaderActionButton.setOnClickListener(view -> toggleServices());
+        // SubsPipe: YouTube only, so the header no longer opens the list of services
+        drawerHeaderBinding.drawerHeaderActionButton.setClickable(false);
+        drawerHeaderBinding.drawerHeaderActionButton.setFocusable(false);
 
         // If the current app name is bigger than the default "NewPipe" (7 chars),
         // let the text view grow a little more as well.

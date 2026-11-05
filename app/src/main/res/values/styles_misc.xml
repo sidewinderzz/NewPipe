@@ -50,6 +50,12 @@
         <item name="colorAccent">@color/dark_settings_accent_color</item>
     </style>
 
+    <!-- SubsPipe: pill-shaped drawer items -->
+    <style name="SubsPipeDrawerItemShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <!-- SubsPipe: rounded video thumbnails -->
     <style name="SubsPipeRoundedThumbnail">
         <item name="cornerFamily">rounded</item>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe: rounded, flat dialog card (like abc_dialog_material_background, with bigger corners) -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="16dp"
+    android:insetTop="16dp"
+    android:insetRight="16dp"
+    android:insetBottom="16dp">
+    <shape android:shape="rectangle">
+        <corners android:radius="16dp" />
+        <solid android:color="@color/subspipe_surface_color" />
+    </shape>
+</inset>
