@@ -28,6 +28,11 @@ object SmartSearchEmbedder {
     private var embedder: TextEmbedder? = null
     private var initFailed = false
 
+    /** Why the model could not be loaded, shown in the feed's help dialog. */
+    @Volatile
+    var loadError: String? = null
+        private set
+
     @Synchronized
     private fun get(context: Context): TextEmbedder? {
         if (embedder != null || initFailed) {
@@ -42,6 +47,7 @@ object SmartSearchEmbedder {
             embedder = TextEmbedder.createFromOptions(context.applicationContext, options)
         } catch (e: Throwable) {
             Log.w(TAG, "Smart search model unavailable, using keyword search", e)
+            loadError = "${e.javaClass.simpleName}: ${e.message}".take(300)
             initFailed = true
         }
         return embedder

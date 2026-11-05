@@ -288,7 +288,10 @@ class FeedFragment : BaseStateFragment<FeedState>() {
             }
 
             AlertDialog.Builder(requireContext())
-                .setMessage(R.string.feed_use_dedicated_fetch_method_help_text)
+                .setMessage(
+                    getString(R.string.feed_use_dedicated_fetch_method_help_text) + "\n\n" +
+                        org.schabi.newpipe.subspipe.SmartSearch.statusText(requireContext())
+                )
                 .setNeutralButton(enableDisableButtonText) { _, _ ->
                     sharedPreferences.edit {
                         putBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), !usingDedicatedMethod)

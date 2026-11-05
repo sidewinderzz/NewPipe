@@ -111,6 +111,12 @@ class SmartSearchStore private constructor(context: Context) :
         channelCache[key] = embedding to textHash
     }
 
+    /** @return videos indexed, videos with descriptions, channel profiles */
+    fun counts(): Triple<Int, Int, Int> {
+        ensureCache()
+        return Triple(cache.size, cache.values.count { it.hasDescription }, channelCache.size)
+    }
+
     fun get(url: String): Entry? {
         ensureCache()
         return cache[url]

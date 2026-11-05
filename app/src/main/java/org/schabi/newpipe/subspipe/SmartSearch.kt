@@ -104,6 +104,17 @@ object SmartSearch {
         return sum
     }
 
+    /** A one-paragraph status for the help dialog, so problems can be spotted on the phone. */
+    fun statusText(context: Context): String {
+        if (!SmartSearchEmbedder.isAvailable(context)) {
+            return "Smart search: OFF, using word matching only.\n" +
+                (SmartSearchEmbedder.loadError ?: "Model file missing from this build.")
+        }
+        val (videos, described, channels) = SmartSearchStore.get(context).counts()
+        return "Smart search: ON. Indexed $videos videos ($described with descriptions) " +
+            "and $channels channels."
+    }
+
     private fun searchTerms(query: String): List<String> = query
         .lowercase(Locale.getDefault())
         .split(Regex("\\s+"))
