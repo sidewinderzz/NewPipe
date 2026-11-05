@@ -16,10 +16,9 @@ import org.schabi.newpipe.R
  */
 object SubsPipeSettings {
     private val HIDDEN_KEYS = intArrayOf(
-        // Main screen: NewPipe's own updater (SubsPipe updates from GitHub) and debug tools
-        R.string.update_pref_screen_key,
+        // Main screen: NewPipe's own auto-update switch (SubsPipe checks GitHub on launch and
+        // keeps the Updates screen for its "Check for updates" button) and debug tools
         R.string.update_app_key,
-        R.string.manual_update_key,
         R.string.debug_pref_screen_key,
 
         // Content: other services, YouTube-wide search and the editable main tabs
