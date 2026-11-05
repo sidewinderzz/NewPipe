@@ -20,4 +20,6 @@
     <string name="subspipe_open_takeout" translatable="false">Open Google Takeout</string>
     <string name="subspipe_subscription_count" translatable="false">You follow %1$d channels</string>
     <string name="subspipe_clear_search" translatable="false">Clear search</string>
+    <string name="subspipe_empty_title" translatable="false">No subscriptions yet</string>
+    <string name="subspipe_empty_message" translatable="false">Import the subscriptions.csv from Google Takeout to bring over everyone you follow, or find channels one at a time.</string>
 </resources>
