@@ -64,10 +64,23 @@ object SubsPipeUpdater {
                     if (release.buildNumber > currentBuild && !activity.isFinishing) {
                         showUpdateDialog(activity, release)
                     } else if (force) {
-                        Toast.makeText(activity, R.string.subspipe_up_to_date, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, R.string.subspipe_up_to_date, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 },
-                { Log.w(TAG, "Update check failed", it) }
+                {
+                    Log.w(TAG, "Update check failed", it)
+                    if (force) {
+                        Toast.makeText(activity, R.string.subspipe_update_failed, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                },
+                {
+                    if (force) {
+                        Toast.makeText(activity, R.string.subspipe_up_to_date, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
             )
     }
 

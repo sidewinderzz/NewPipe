@@ -53,7 +53,9 @@ configure<ApplicationExtension> {
 
         versionCode = System.getProperty("versionCodeOverride")?.toInt() ?: NEWPIPE_VERSION_CODE
 
-        versionName = NEWPIPE_VERSION_NAME
+        // SubsPipe: show the build number, e.g. "SubsPipe 19 (0.29.1)"
+        versionName = System.getProperty("versionCodeOverride")?.toIntOrNull()
+            ?.let { "SubsPipe ${it - 100000} ($NEWPIPE_VERSION_NAME)" } ?: NEWPIPE_VERSION_NAME
         System.getProperty("versionNameSuffix")?.let { versionNameSuffix = it }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
