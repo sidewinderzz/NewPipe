@@ -288,14 +288,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDrawerMenuForCurrentService() throws ExtractionException {
         //Tabs
-        // SubsPipe: Feed first, then Channels
+        // SubsPipe: Home (the feed) first, then Subscriptions (the channel list)
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
-                .setIcon(R.drawable.ic_subscriptions);
+                .setIcon(R.drawable.ic_home);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_SUBSCRIPTIONS, ORDER,
                         R.string.tab_subscriptions)
-                .setIcon(R.drawable.ic_tv);
+                .setIcon(R.drawable.ic_subscriptions);
         // SubsPipe: find channels to subscribe to, or import a list
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_ADD_SUBSCRIPTIONS, ORDER,

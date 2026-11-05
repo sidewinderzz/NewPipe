@@ -225,7 +225,7 @@ public abstract class Tab {
         @DrawableRes
         @Override
         public int getTabIconRes(final Context context) {
-            return R.drawable.ic_tv;
+            return R.drawable.ic_subscriptions;
         }
 
         @Override
@@ -251,7 +251,7 @@ public abstract class Tab {
         @DrawableRes
         @Override
         public int getTabIconRes(final Context context) {
-            return R.drawable.ic_subscriptions;
+            return R.drawable.ic_home;
         }
 
         @Override
