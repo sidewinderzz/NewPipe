@@ -145,6 +145,16 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
                 true
             }
 
+        // SubsPipe: switch between A-Z and newest-first
+        val newestFirst = this::viewModel.isInitialized && viewModel.isSortNewestFirst()
+        menu.add(if (newestFirst) R.string.subspipe_sort_az else R.string.subspipe_sort_newest)
+            .setOnMenuItemClickListener {
+                if (!this::viewModel.isInitialized) return@setOnMenuItemClickListener false
+                viewModel.setSortNewestFirst(!viewModel.isSortNewestFirst())
+                activity.invalidateOptionsMenu()
+                true
+            }
+
         buildImportExportMenu(menu)
     }
 

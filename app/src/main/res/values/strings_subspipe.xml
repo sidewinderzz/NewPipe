@@ -32,4 +32,6 @@
     </string-array>
     <string name="subspipe_manual_update_summary">You have %1$s. Tap to check for a newer SubsPipe build.</string>
     <string name="subspipe_update_failed">Couldn\'t check for updates. Try again in a minute.</string>
+    <string name="subspipe_sort_newest">Sort: newest first</string>
+    <string name="subspipe_sort_az">Sort: A to Z</string>
 </resources>
