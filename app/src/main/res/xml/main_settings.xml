@@ -35,6 +35,12 @@
         app:iconSpaceReserved="false" />
 
     <PreferenceScreen
+        android:fragment="org.schabi.newpipe.subspipe.SmartSearchSettingsFragment"
+        android:icon="@drawable/ic_search"
+        android:title="@string/subspipe_smart_search_title"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceScreen
         android:fragment="org.schabi.newpipe.settings.NotificationsSettingsFragment"
         android:icon="@drawable/ic_notifications"
         android:title="@string/notifications"

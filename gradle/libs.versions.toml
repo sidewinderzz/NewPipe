@@ -46,7 +46,6 @@ markwon = "4.6.2"
 material = "1.11.0" # TODO: update to newer version after bug is fixed. See https://github.com/TeamNewPipe/NewPipe/pull/13018
 material3 = "1.11.0-alpha07"
 media = "1.7.1" # Keep at 1.7.1 for compatibility with exoplayer
-mediapipe = "0.10.20" # SubsPipe smart search
 mockitoCore = "5.24.0"
 multiplatform = "1.12.2"
 navigation3 = "1.1.2" # New versions require minSdk 24
@@ -122,7 +121,6 @@ facebook-stetho-core = { module = "com.facebook.stetho:stetho", version.ref = "s
 facebook-stetho-okhttp3 = { module = "com.facebook.stetho:stetho-okhttp3", version.ref = "stetho" }
 google-android-material = { module = "com.google.android.material:material", version.ref = "material" }
 google-autoservice-annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice-google" }
-google-mediapipe-tasks-text = { module = "com.google.mediapipe:tasks-text", version.ref = "mediapipe" }
 google-exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayer" }
 google-exoplayer-dash = { module = "com.google.android.exoplayer:exoplayer-dash", version.ref = "exoplayer" }
 google-exoplayer-database = { module = "com.google.android.exoplayer:exoplayer-database", version.ref = "exoplayer" }
