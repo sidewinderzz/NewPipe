@@ -90,7 +90,7 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         youtubeRestrictedModeEnabledKey = getString(R.string.youtube_restricted_mode_enabled);
         youtubeRestrictedModeEnabled = prefs.getBoolean(youtubeRestrictedModeEnabledKey, false);
         mainTabsPositionKey = getString(R.string.main_tabs_position_key);
-        mainTabsPositionBottom = prefs.getBoolean(mainTabsPositionKey, false);
+        mainTabsPositionBottom = prefs.getBoolean(mainTabsPositionKey, true);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
             setupTabs();
         }
 
-        final boolean newMainTabsPosition = prefs.getBoolean(mainTabsPositionKey, false);
+        final boolean newMainTabsPosition = prefs.getBoolean(mainTabsPositionKey, true);
         if (mainTabsPositionBottom != newMainTabsPosition) {
             mainTabsPositionBottom = newMainTabsPosition;
             updateTabLayoutPosition();
@@ -160,6 +160,9 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
                     + "menu = [" + menu + "], inflater = [" + inflater + "]");
         }
         inflater.inflate(R.menu.menu_main_fragment, menu);
+        // SubsPipe: no global YouTube search; the feed has its own
+        // search that only looks through videos from your subscriptions.
+        menu.removeItem(R.id.action_search);
 
         final ActionBar supportActionBar = activity.getSupportActionBar();
         if (supportActionBar != null) {
@@ -246,7 +249,7 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         // change the background and icon color of the tab layout:
         // service-colored at the top, app-background-colored at the bottom
         tabLayout.setBackgroundColor(ThemeHelper.resolveColorFromAttr(requireContext(),
-                bottom ? android.R.attr.windowBackground : R.attr.colorPrimary));
+                bottom ? android.R.attr.windowBackground : R.attr.subspipe_bar_color));
 
         @ColorInt final int iconColor = bottom
                 ? ThemeHelper.resolveColorFromAttr(requireContext(), android.R.attr.colorAccent)

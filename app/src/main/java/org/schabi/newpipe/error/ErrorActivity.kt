@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
@@ -95,8 +96,12 @@ class ErrorActivity : AppCompatActivity() {
             ShareUtils.copyToClipboard(this, buildMarkdown())
         }
 
+        // SubsPipe: reports go to the SubsPipe repository, never to NewPipe's team.
+        // The report is copied first so it can be pasted into the new issue.
+        binding.errorReportEmailButton.visibility = View.GONE
         binding.errorReportGitHubButton.setOnClickListener { _ ->
-            openPrivacyPolicyDialog(this, "GITHUB")
+            ShareUtils.copyToClipboard(this, buildMarkdown())
+            ShareUtils.openUrlInApp(this, ERROR_GITHUB_ISSUE_URL)
         }
 
         // normal bugreport
@@ -277,6 +282,6 @@ class ErrorActivity : AppCompatActivity() {
         private const val ERROR_EMAIL_ADDRESS = "crashreport@newpipe.schabi.org"
         private const val ERROR_EMAIL_SUBJECT = "Exception in "
 
-        private const val ERROR_GITHUB_ISSUE_URL = "https://github.com/TeamNewPipe/NewPipe/issues"
+        private const val ERROR_GITHUB_ISSUE_URL = "https://github.com/sidewinderzz/NewPipe/issues/new"
     }
 }

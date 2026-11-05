@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- SubsPipe: toolbar / top bar background, separate from the accent colorPrimary -->
+    <attr name="subspipe_bar_color" format="color" />
     <attr name="progress_horizontal_drawable" format="reference" />
     <!-- Can't refer to colors directly in drawable's xml-->
     <attr name="toolbar_shadow" format="reference" />

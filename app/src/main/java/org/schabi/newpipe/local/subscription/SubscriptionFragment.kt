@@ -1,5 +1,6 @@
 package org.schabi.newpipe.local.subscription
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
@@ -45,7 +47,10 @@ import org.schabi.newpipe.local.subscription.item.FeedGroupCardItem
 import org.schabi.newpipe.local.subscription.item.FeedGroupCarouselItem
 import org.schabi.newpipe.local.subscription.item.GroupsHeader
 import org.schabi.newpipe.local.subscription.item.Header
-import org.schabi.newpipe.local.subscription.item.ImportSubscriptionsHintPlaceholderItem
+import org.schabi.newpipe.local.subscription.workers.SubscriptionImportInput
+import org.schabi.newpipe.streams.io.NoFileManagerSafeGuard
+import org.schabi.newpipe.streams.io.StoredFileHelper
+import org.schabi.newpipe.subspipe.EmptySubscriptionsItem
 import org.schabi.newpipe.util.NavigationHelper
 import org.schabi.newpipe.util.OnClickGesture
 import org.schabi.newpipe.util.ServiceHelper
@@ -66,6 +71,18 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
     private lateinit var feedGroupsCarousel: FeedGroupCarouselItem
     private lateinit var feedGroupsSortMenuItem: GroupsHeader
     private val subscriptionsSection = Section()
+
+    // SubsPipe: pick a Takeout subscriptions.csv straight from the empty Subscriptions tab
+    private val importCsvLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            val uri = result.data?.dataString
+            if (result.resultCode == Activity.RESULT_OK && uri != null) {
+                ImportConfirmationDialog.show(
+                    this,
+                    SubscriptionImportInput.InputStreamMode(ServiceList.YouTube.serviceId, uri)
+                )
+            }
+        }
 
     @State
     @JvmField
@@ -119,6 +136,25 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         activity.supportActionBar?.setDisplayShowTitleEnabled(true)
         activity.supportActionBar?.setTitle(R.string.tab_subscriptions)
 
+        // SubsPipe: find channels to subscribe to, or import a list
+        menu.add(R.string.subspipe_add_subscriptions)
+            .setIcon(R.drawable.ic_search_add)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                NavigationHelper.openAddSubscriptionsFragment(fm)
+                true
+            }
+
+        // SubsPipe: switch between A-Z and newest-first
+        val newestFirst = this::viewModel.isInitialized && viewModel.isSortNewestFirst()
+        menu.add(if (newestFirst) R.string.subspipe_sort_az else R.string.subspipe_sort_newest)
+            .setOnMenuItemClickListener {
+                if (!this::viewModel.isInitialized) return@setOnMenuItemClickListener false
+                viewModel.setSortNewestFirst(!viewModel.isSortNewestFirst())
+                activity.invalidateOptionsMenu()
+                true
+            }
+
         buildImportExportMenu(menu)
     }
 
@@ -129,7 +165,8 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         addMenuItemToSubmenu(importSubMenu, R.string.previous_export) { importExportHelper.onImportPreviousSelected() }
             .setIcon(R.drawable.ic_backup)
 
-        for (service in ServiceList.all()) {
+        // SubsPipe: YouTube only (no SoundCloud or other services)
+        for (service in listOf(ServiceList.YouTube)) {
             val subscriptionExtractor = service.subscriptionExtractor ?: continue
 
             val supportedSources = subscriptionExtractor.supportedSources
@@ -263,7 +300,19 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
             groupAdapter.add(this)
         }
 
-        subscriptionsSection.setPlaceholder(ImportSubscriptionsHintPlaceholderItem())
+        subscriptionsSection.setPlaceholder(
+            EmptySubscriptionsItem(
+                onImportCsv = {
+                    NoFileManagerSafeGuard.launchSafe(
+                        importCsvLauncher,
+                        StoredFileHelper.getPicker(requireContext(), "*/*"),
+                        TAG,
+                        requireContext()
+                    )
+                },
+                onFindChannels = { NavigationHelper.openAddSubscriptionsFragment(fm) }
+            )
+        )
         subscriptionsSection.setHideWhenEmpty(true)
 
         groupAdapter.add(

@@ -46,5 +46,7 @@ class GroupsHeader(
             if (listViewMode) R.drawable.ic_apps else R.drawable.ic_list
         )
         viewBinding.headerSort.isVisible = showSortButton
+        // SubsPipe: groups are always a row of chips, so no list/grid toggle
+        viewBinding.headerToggleViewMode.isVisible = false
     }
 }

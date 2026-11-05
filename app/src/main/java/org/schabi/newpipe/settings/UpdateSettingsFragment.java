@@ -8,25 +8,15 @@ import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
-import org.schabi.newpipe.NewVersionWorker;
+import org.schabi.newpipe.BuildConfig;
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.subspipe.SubsPipeUpdater;
 
 public class UpdateSettingsFragment extends BasePreferenceFragment {
-    private final Preference.OnPreferenceChangeListener updatePreferenceChange = (p, nVal) -> {
-        final boolean checkForUpdates = (boolean) nVal;
-        defaultPreferences.edit()
-                .putBoolean(getString(R.string.update_app_key), checkForUpdates)
-                .apply();
-
-        if (checkForUpdates) {
-            NewVersionWorker.enqueueNewVersionCheckingWork(requireContext(), true);
-        }
-        return true;
-    };
-
     private final Preference.OnPreferenceClickListener manualUpdateClick = preference -> {
         Toast.makeText(getContext(), R.string.checking_updates_toast, Toast.LENGTH_SHORT).show();
-        NewVersionWorker.enqueueNewVersionCheckingWork(requireContext(), true);
+        // SubsPipe: check sidewinderzz/NewPipe releases instead of NewPipe's
+        SubsPipeUpdater.INSTANCE.checkInBackground(requireActivity(), true);
         return true;
     };
 
@@ -34,8 +24,11 @@ public class UpdateSettingsFragment extends BasePreferenceFragment {
     public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
         addPreferencesFromResourceRegistry();
 
-        requirePreference(R.string.update_app_key)
-                .setOnPreferenceChangeListener(updatePreferenceChange);
+        // SubsPipe: NewPipe's own update checker doesn't apply; SubsPipe checks on every launch
+        getPreferenceScreen().removePreference(requirePreference(R.string.update_app_key));
+        requirePreference(R.string.manual_update_key)
+                .setSummary(getString(R.string.subspipe_manual_update_summary,
+                        BuildConfig.VERSION_NAME));
         requirePreference(R.string.manual_update_key)
                 .setOnPreferenceClickListener(manualUpdateClick);
     }

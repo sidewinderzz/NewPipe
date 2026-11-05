@@ -184,6 +184,31 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
      */
     private TextWatcher textWatcher;
 
+    /** SubsPipe: argument that limits this search to finding channels to subscribe to. */
+    private static final String ARG_CHANNELS_ONLY = "subspipe_channels_only";
+
+    /**
+     * SubsPipe: a search that only returns channels, so new channels can be found and
+     * subscribed to without bringing back general video search.
+     *
+     * @param serviceId the service to search channels on
+     * @return a search fragment locked to the channels filter
+     */
+    public static SearchFragment getChannelSearchInstance(final int serviceId) {
+        final SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setQuery(serviceId, "",
+                new String[]{YoutubeSearchQueryHandlerFactory.CHANNELS}, "");
+        final Bundle args = new Bundle();
+        args.putBoolean(ARG_CHANNELS_ONLY, true);
+        searchFragment.setArguments(args);
+        return searchFragment;
+    }
+
+    private boolean isChannelsOnly() {
+        final Bundle args = getArguments();
+        return args != null && args.getBoolean(ARG_CHANNELS_ONLY, false);
+    }
+
     public static SearchFragment getInstance(final int serviceId, final String searchString) {
         final SearchFragment searchFragment = new SearchFragment();
         searchFragment.setQuery(serviceId, searchString, new String[0], "");
@@ -232,7 +257,9 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
         updateService();
         // Add the service name to search string hint
         // to make it more obvious which platform is being searched.
-        if (service != null) {
+        if (isChannelsOnly()) {
+            searchEditText.setHint(R.string.subspipe_find_channels_hint);
+        } else if (service != null) {
             searchEditText.setHint(
                     getString(R.string.search_with_service_name,
                             service.getServiceInfo().getName()));
@@ -447,6 +474,11 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
         if (supportActionBar != null) {
             supportActionBar.setDisplayShowTitleEnabled(false);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (isChannelsOnly()) {
+            // SubsPipe: no filter menu, this search always looks for channels
+            return;
         }
 
         int itemId = 0;

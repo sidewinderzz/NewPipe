@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe-only strings -->
+<resources>
+    <string name="subspipe_search_hint" translatable="false">Search your subscriptions by topic</string>
+    <string name="subspipe_find_channels" translatable="false">Find channels</string>
+    <string name="subspipe_find_channels_hint" translatable="false">Find channels to subscribe to</string>
+    <string name="subspipe_update_title" translatable="false">SubsPipe update available</string>
+    <string name="subspipe_update_message" translatable="false">Build %1$d is ready. Download and install it now? Your subscriptions and history are kept.</string>
+    <string name="subspipe_update_now" translatable="false">Update</string>
+    <string name="subspipe_update_later" translatable="false">Later</string>
+    <string name="subspipe_update_downloading" translatable="false">Downloading the update…</string>
+    <string name="subspipe_update_download_failed" translatable="false">The update didn\'t download. Try again from Settings > Updates.</string>
+    <string name="subspipe_up_to_date" translatable="false">SubsPipe is up to date</string>
+    <string name="subspipe_new_group" translatable="false">New group</string>
+    <string name="subspipe_accent_key" translatable="false">subspipe_accent</string>
+    <string name="subspipe_accent_title" translatable="false">Highlight color</string>
+    <string name="subspipe_accent_summary" translatable="false">Color of progress bars, switches and other highlights</string>
+    <string-array name="subspipe_accent_values" translatable="false">
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>orange</item>
+        <item>purple</item>
+        <item>teal</item>
+    </string-array>
+    <string-array name="subspipe_accent_names" translatable="false">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Orange</item>
+        <item>Purple</item>
+        <item>Teal</item>
+    </string-array>
+    <string name="subspipe_manual_update_summary">You have %1$s. Tap to check for a newer SubsPipe build.</string>
+    <string name="subspipe_update_failed">Couldn\'t check for updates. Try again in a minute.</string>
+    <string name="subspipe_sort_newest">Sort: newest first</string>
+    <string name="subspipe_sort_az">Sort: A to Z</string>
+    <string name="subspipe_smart_search_title">Smart search</string>
+    <string name="subspipe_ai_key_title">AI key for channel topics</string>
+    <string name="subspipe_ai_key_help">Paste a free Gemini key (get one at aistudio.google.com/apikey) or a Claude key (console.anthropic.com). It\'s used once per channel to write topic tags like \"woodworking, carpentry\" from the channel\'s name, about text and recent titles. Searching itself stays on your phone.</string>
+    <string name="subspipe_ai_key_none">Not set. Without a key, search only matches titles, descriptions and channel names.</string>
+    <string name="subspipe_ai_key_set">%1$s key ending in %2$s</string>
+    <string name="subspipe_tag_now_title">Tag channels now</string>
+    <string name="subspipe_tag_now_summary">Writes topic tags for channels that don\'t have any yet. Also happens on its own after each feed refresh.</string>
+    <string name="subspipe_channel_topics_title">Channel topics</string>
+    <string name="subspipe_channel_topics_summary">See and edit each channel\'s tags. Tags you edit are never overwritten.</string>
+    <string name="subspipe_redo_tags_title">Redo AI tags</string>
+    <string name="subspipe_redo_tags_summary">Throws away the AI\'s tags and writes them again. Your own edits stay.</string>
+    <string name="subspipe_tagging">Tagging channels…</string>
+    <string name="subspipe_tagging_done">Tagged %1$d channels</string>
+    <string name="subspipe_tagging_failed">Tagging failed: %1$s</string>
+    <string name="subspipe_need_key">Add an AI key first</string>
+    <string name="subspipe_no_tags">No tags yet</string>
+    <string name="subspipe_edit_tags_hint">Tags, separated by commas</string>
+</resources>

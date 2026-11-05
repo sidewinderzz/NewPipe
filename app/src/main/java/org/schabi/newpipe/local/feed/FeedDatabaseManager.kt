@@ -31,8 +31,9 @@ class FeedDatabaseManager(context: Context) {
     companion object {
         /**
          * Only items that are newer than this will be saved.
+         * SubsPipe: one year instead of 13 weeks, so feed search has more to look through.
          */
-        val FEED_OLDEST_ALLOWED_DATE: OffsetDateTime = LocalDate.now().minusWeeks(13)
+        val FEED_OLDEST_ALLOWED_DATE: OffsetDateTime = LocalDate.now().minusWeeks(52)
             .atStartOfDay().atOffset(ZoneOffset.UTC)
     }
 

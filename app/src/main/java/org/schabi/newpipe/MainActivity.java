@@ -83,6 +83,8 @@ import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
+import org.schabi.newpipe.subspipe.SubsPipeSettings;
+import org.schabi.newpipe.subspipe.SubsPipeUpdater;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.KioskTranslator;
@@ -120,11 +122,17 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
 
+    /** SubsPipe: hide Trending and the other kiosks from the drawer. */
+    private static final boolean SHOW_KIOSKS_IN_DRAWER = false;
+    /** SubsPipe: hide NewPipe's own announcement popups on launch. */
+    private static final boolean SHOW_NEWPIPE_POPUPS = false;
+
     private static final int ITEM_ID_SUBSCRIPTIONS = -1;
     private static final int ITEM_ID_FEED = -2;
     private static final int ITEM_ID_BOOKMARKS = -3;
     private static final int ITEM_ID_DOWNLOADS = -4;
     private static final int ITEM_ID_HISTORY = -5;
+    private static final int ITEM_ID_ADD_SUBSCRIPTIONS = -6;
     private static final int ITEM_ID_SETTINGS = 0;
     private static final int ITEM_ID_DONATION = 1;
     private static final int ITEM_ID_ABOUT = 2;
@@ -194,20 +202,20 @@ public class MainActivity extends AppCompatActivity {
             // if this is enabled by the user.
             NotificationWorker.initialize(this);
         }
-        if (!UpdateSettingsFragment.wasUserAskedForConsent(this)
-                && !App.getInstance().isFirstRun()
-                && ReleaseVersionUtil.INSTANCE.isReleaseApk()) {
-            UpdateSettingsFragment.askForConsentToUpdateChecks(this);
+        // SubsPipe: no NewPipe announcement popups (update-check consent, "Keep Android Open",
+        // Android 5 notice, NewPipe migration notes). SubsPipe checks its own GitHub releases.
+        if (SHOW_NEWPIPE_POPUPS) {
+            if (!UpdateSettingsFragment.wasUserAskedForConsent(this)
+                    && !App.getInstance().isFirstRun()
+                    && ReleaseVersionUtil.INSTANCE.isReleaseApk()) {
+                UpdateSettingsFragment.askForConsentToUpdateChecks(this);
+            }
+            if (!DEBUG) {
+                showKeepAndroidDialog();
+                showApi23RequirementDialog();
+            }
+            MigrationManager.showUserInfoIfPresent(this);
         }
-
-        // ReleaseVersionUtil.INSTANCE.isReleaseApk() will be true only for main official build
-        // We want every release build (nightly, nightly-refactor) to show the popup
-        if (!DEBUG) {
-            showKeepAndroidDialog();
-            showApi23RequirementDialog();
-        }
-
-        MigrationManager.showUserInfoIfPresent(this);
     }
 
     @Override
@@ -215,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         final App app = App.getInstance();
+
+        // SubsPipe: look for a newer build on GitHub
+        SubsPipeUpdater.INSTANCE.checkInBackground(this, false);
+        // SubsPipe: one-time defaults picked by the user (can be changed in settings)
+        SubsPipeSettings.applyDefaultsOnce(this);
 
         if (sharedPreferences.getBoolean(app.getString(R.string.update_app_key), false)
                 && sharedPreferences
@@ -275,16 +288,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDrawerMenuForCurrentService() throws ExtractionException {
         //Tabs
+        // SubsPipe: Home (the feed) first, then Subscriptions (the channel list)
+        drawerLayoutBinding.navigation.getMenu()
+                .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
+                .setIcon(R.drawable.ic_home);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_SUBSCRIPTIONS, ORDER,
                         R.string.tab_subscriptions)
-                .setIcon(R.drawable.ic_tv);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_tabs_group, ITEM_ID_FEED, ORDER, R.string.fragment_feed_title)
                 .setIcon(R.drawable.ic_subscriptions);
+        // SubsPipe: find channels to subscribe to, or import a list
         drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_tabs_group, ITEM_ID_BOOKMARKS, ORDER, R.string.tab_bookmarks)
-                .setIcon(R.drawable.ic_bookmark);
+                .add(R.id.menu_tabs_group, ITEM_ID_ADD_SUBSCRIPTIONS, ORDER,
+                        R.string.subspipe_add_subscriptions)
+                .setIcon(R.drawable.ic_search_add);
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_tabs_group, ITEM_ID_DOWNLOADS, ORDER, R.string.downloads)
                 .setIcon(R.drawable.ic_file_download);
@@ -299,6 +315,9 @@ public class MainActivity extends AppCompatActivity {
         int kioskMenuItemId = 0;
 
         for (final String ks : service.getKioskList().getAvailableKiosks()) {
+            if (!SHOW_KIOSKS_IN_DRAWER) {
+                break;
+            }
             drawerLayoutBinding.navigation.getMenu()
                     .add(R.id.menu_kiosks_group, kioskMenuItemId, 0, KioskTranslator
                             .getTranslatedKioskName(ks, this))
@@ -310,13 +329,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayoutBinding.navigation.getMenu()
                 .add(R.id.menu_options_about_group, ITEM_ID_SETTINGS, ORDER, R.string.settings)
                 .setIcon(R.drawable.ic_settings);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_DONATION, ORDER,
-                        R.string.donation_title)
-                .setIcon(R.drawable.volunteer_activism_ic);
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_ABOUT, ORDER, R.string.tab_about)
-                .setIcon(R.drawable.ic_info_outline);
     }
 
     private boolean drawerItemSelected(final MenuItem item) {
@@ -355,6 +367,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case ITEM_ID_SUBSCRIPTIONS:
                 NavigationHelper.openSubscriptionFragment(getSupportFragmentManager());
+                break;
+            case ITEM_ID_ADD_SUBSCRIPTIONS:
+                NavigationHelper.openAddSubscriptionsFragment(getSupportFragmentManager());
                 break;
             case ITEM_ID_FEED:
                 NavigationHelper.openFeedFragment(getSupportFragmentManager());
@@ -399,7 +414,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerHeader() {
-        drawerHeaderBinding.drawerHeaderActionButton.setOnClickListener(view -> toggleServices());
+        // SubsPipe: YouTube only, so the header no longer opens the list of services
+        drawerHeaderBinding.drawerHeaderActionButton.setClickable(false);
+        drawerHeaderBinding.drawerHeaderActionButton.setFocusable(false);
 
         // If the current app name is bigger than the default "NewPipe" (7 chars),
         // let the text view grow a little more as well.

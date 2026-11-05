@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe app icon: a red play button on a dark tile -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.18"
+        android:strokeLineJoin="round"
+        android:pathData="M5.18,2.91L5.18,21.09L20.64,12Z" />
+</vector>

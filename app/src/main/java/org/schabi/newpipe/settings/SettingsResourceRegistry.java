@@ -42,6 +42,9 @@ public final class SettingsResourceRegistry {
         add(VideoAudioSettingsFragment.class, R.xml.video_audio_settings);
         add(ExoPlayerSettingsFragment.class, R.xml.exoplayer_settings);
         add(BackupRestoreSettingsFragment.class, R.xml.backup_restore_settings);
+        // SubsPipe: AI key and channel topic tags for feed search
+        add(org.schabi.newpipe.subspipe.SmartSearchSettingsFragment.class,
+                R.xml.smart_search_settings).setSearchable(false);
     }
 
     private SettingRegistryEntry add(

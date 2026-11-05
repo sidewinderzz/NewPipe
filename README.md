@@ -1,3 +1,8 @@
+> **SubsPipe**: a personal fork of NewPipe that only shows your subscription feed.
+> Search only looks through videos from channels you subscribe to, the app opens straight to
+> your feed, and it uses a YouTube-style dark look. It installs next to regular NewPipe
+> (package `com.sidewinderzz.subspipe`). APKs are built by the "Build SubsPipe APK" GitHub Action.
+
 <p align="center"><a href="https://newpipe.net"><img src="assets/new_pipe_icon_5.png" width="150"></a></p> 
 <h2 align="center"><b>NewPipe</b></h2>
 <h4 align="center">A libre lightweight streaming front-end for Android.</h4>

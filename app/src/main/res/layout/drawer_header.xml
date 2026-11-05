@@ -4,42 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorPrimary"
+    android:background="?attr/subspipe_bar_color"
     android:nextFocusDown="@+id/drawer_header_action_button">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/drawer_header_padding_top"
+        android:layout_marginTop="8dp"
         android:fitsSystemWindows="true"
         android:gravity="bottom"
-        android:minHeight="@dimen/drawer_header_content_min_height"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginLeft="16dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="16dp"
-            android:gravity="center"
+            android:gravity="start|center_vertical"
             android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="@dimen/drawer_header_newpipe_icon_size"
-                android:layout_height="@dimen/drawer_header_newpipe_icon_size"
-                android:layout_marginEnd="@dimen/drawer_header_newpipe_icon_title_space"
-                android:src="@drawable/splash_foreground"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/subspipe_logo"
                 tools:ignore="ContentDescription" />
 
             <org.schabi.newpipe.views.NewPipeTextView
@@ -54,9 +44,7 @@
                 android:text="@string/app_name"
                 android:textColor="@color/drawer_header_font_color"
                 android:textStyle="bold"
-                app:autoSizeMaxTextSize="@dimen/drawer_header_newpipe_title_max_text_size"
-                app:autoSizeMinTextSize="@dimen/drawer_header_newpipe_title_min_text_size"
-                app:autoSizeTextType="uniform"
+                android:textSize="20sp"
                 tools:ignore="UnusedAttribute" />
         </LinearLayout>
 
@@ -64,8 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:background="@drawable/drawer_header_bottom_background"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:paddingLeft="6dp"
             android:paddingRight="6dp">

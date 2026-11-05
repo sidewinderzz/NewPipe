@@ -2,21 +2,21 @@ package org.schabi.newpipe.local.subscription
 
 import android.app.Application
 import android.content.Context
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.xwray.groupie.Group
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import org.schabi.newpipe.info_list.ItemViewMode
 import org.schabi.newpipe.local.feed.FeedDatabaseManager
 import org.schabi.newpipe.local.subscription.item.ChannelItem
 import org.schabi.newpipe.local.subscription.item.FeedGroupCardGridItem
 import org.schabi.newpipe.local.subscription.item.FeedGroupCardItem
 import org.schabi.newpipe.util.DEFAULT_THROTTLE_TIMEOUT
-import org.schabi.newpipe.util.ThemeHelper.getItemViewMode
 
 class SubscriptionViewModel(application: Application) : AndroidViewModel(application) {
     private var feedDatabaseManager: FeedDatabaseManager = FeedDatabaseManager(application)
@@ -52,8 +52,21 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
             { mutableStateLiveData.postValue(SubscriptionState.ErrorState(it)) }
         )
 
-    private var stateItemsDisposable = subscriptionManager.subscriptions()
+    // SubsPipe: sort A-Z (default) or newest first. Newest first uses the order channels
+    // were added to SubsPipe, since YouTube's Takeout export doesn't include subscribe dates.
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
+    private val sortNewestFirst = BehaviorProcessor.createDefault(
+        prefs.getBoolean(PREF_SORT_NEWEST_FIRST, false)
+    )
+
+    private var stateItemsDisposable = Flowable
+        .combineLatest(
+            subscriptionManager.subscriptions(),
+            sortNewestFirst.distinctUntilChanged(),
+            ::Pair
+        )
         .throttleLatest(DEFAULT_THROTTLE_TIMEOUT, TimeUnit.MILLISECONDS)
+        .map { (subs, newestFirst) -> if (newestFirst) subs.sortedByDescending { it.uid } else subs }
         .map { it.map { entity -> ChannelItem(entity.toChannelInfoItem(), entity.uid, ChannelItem.ItemVersion.MINI) } }
         .subscribeOn(Schedulers.io())
         .subscribe(
@@ -71,6 +84,13 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
         listViewMode.onNext(newListViewMode)
     }
 
+    fun isSortNewestFirst(): Boolean = sortNewestFirst.value ?: false
+
+    fun setSortNewestFirst(newestFirst: Boolean) {
+        prefs.edit { putBoolean(PREF_SORT_NEWEST_FIRST, newestFirst) }
+        sortNewestFirst.onNext(newestFirst)
+    }
+
     fun getListViewMode(): Boolean {
         return listViewMode.value ?: true
     }
@@ -81,6 +101,7 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
     }
 
     companion object {
+        private const val PREF_SORT_NEWEST_FIRST = "subspipe_subscriptions_sort_newest_first"
 
         /**
          * Returns whether to use GridLayout mode for Subscription Fragment.
@@ -96,9 +117,11 @@ class SubscriptionViewModel(application: Application) : AndroidViewModel(applica
          *
          *  @see [SubscriptionViewModel.shouldUseGridForSubscription] to modify Layout Manager
          */
+        @Suppress("UNUSED_PARAMETER")
         fun shouldUseGridForSubscription(context: Context): Boolean {
-            val itemViewMode = getItemViewMode(context)
-            return itemViewMode == ItemViewMode.GRID || itemViewMode == ItemViewMode.CARD
+            // SubsPipe: channels are always a compact list (small avatar + name), and
+            // channel groups are always a row of chips, whatever the list view mode is.
+            return false
         }
     }
 }

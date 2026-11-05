@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -226,6 +227,53 @@ class FeedFragment : BaseStateFragment<FeedState>() {
         activity.supportActionBar?.subtitle = groupName
 
         inflater.inflate(R.menu.menu_feed_fragment, menu)
+        setUpSubscriptionSearch(menu)
+    }
+
+    /**
+     * SubsPipe: the search box only filters videos from your subscriptions
+     * (the ones already loaded into this feed), it never searches all of YouTube.
+     */
+    private fun setUpSubscriptionSearch(menu: Menu) {
+        val searchItem = menu.findItem(R.id.menu_item_feed_search) ?: return
+        val searchView = searchItem.actionView as? SearchView ?: return
+        searchView.queryHint = getString(R.string.subspipe_search_hint)
+        searchView.maxWidth = Int.MAX_VALUE
+
+        val currentQuery = if (::viewModel.isInitialized) viewModel.currentSearchQuery else ""
+        if (currentQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(currentQuery, false)
+            searchView.clearFocus()
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (::viewModel.isInitialized) {
+                    viewModel.setSearchQuery(query.orEmpty())
+                }
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (::viewModel.isInitialized) {
+                    viewModel.setSearchQuery(newText.orEmpty())
+                }
+                return true
+            }
+        })
+
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean = true
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                if (::viewModel.isInitialized) {
+                    viewModel.setSearchQuery("")
+                }
+                return true
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -233,14 +281,17 @@ class FeedFragment : BaseStateFragment<FeedState>() {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
             val usingDedicatedMethod = sharedPreferences
-                .getBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), false)
+                .getBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), true)
             val enableDisableButtonText = when {
                 usingDedicatedMethod -> R.string.feed_use_dedicated_fetch_method_disable_button
                 else -> R.string.feed_use_dedicated_fetch_method_enable_button
             }
 
             AlertDialog.Builder(requireContext())
-                .setMessage(R.string.feed_use_dedicated_fetch_method_help_text)
+                .setMessage(
+                    getString(R.string.feed_use_dedicated_fetch_method_help_text) + "\n\n" +
+                        org.schabi.newpipe.subspipe.SmartSearch.statusText(requireContext())
+                )
                 .setNeutralButton(enableDisableButtonText) { _, _ ->
                     sharedPreferences.edit {
                         putBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), !usingDedicatedMethod)
@@ -515,7 +566,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val isFastFeedModeEnabled = sharedPreferences.getBoolean(
             getString(R.string.feed_use_dedicated_fetch_method_key),
-            false
+            true
         )
 
         val builder = AlertDialog.Builder(requireContext())

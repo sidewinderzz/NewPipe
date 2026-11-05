@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.preference.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.functions.Function6
+import io.reactivex.rxjava3.functions.Function7
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.time.OffsetDateTime
@@ -26,6 +26,8 @@ import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.ErrorResultE
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.IdleEvent
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.ProgressEvent
 import org.schabi.newpipe.local.feed.service.FeedEventManager.Event.SuccessResultEvent
+import org.schabi.newpipe.subspipe.SmartSearch
+import org.schabi.newpipe.subspipe.SmartSearchIndexer
 import org.schabi.newpipe.util.DEFAULT_THROTTLE_TIMEOUT
 
 class FeedViewModel(
@@ -52,6 +54,14 @@ class FeedViewModel(
         .startWithItem(initialShowFutureItems)
         .distinctUntilChanged()
 
+    /** SubsPipe: text typed into the feed search box; empty means no filtering. */
+    private val searchQuery = BehaviorProcessor.createDefault("")
+    private val searchQueryFlowable = searchQuery.distinctUntilChanged()
+
+    /** The query currently applied to the feed, so the search box can be restored. */
+    val currentSearchQuery: String
+        get() = searchQuery.value.orEmpty()
+
     private val mutableStateLiveData = MutableLiveData<FeedState>()
     val stateLiveData: LiveData<FeedState> = mutableStateLiveData
 
@@ -63,26 +73,31 @@ class FeedViewModel(
             showFutureItemsFlowable,
             feedDatabaseManager.notLoadedCount(groupId),
             feedDatabaseManager.oldestSubscriptionUpdate(groupId),
+            searchQueryFlowable,
 
-            Function6 {
+            Function7 {
                     t1: FeedEventManager.Event,
                     t2: Boolean,
                     t3: Boolean,
                     t4: Boolean,
                     t5: Long,
-                    t6: List<OffsetDateTime?>
+                    t6: List<OffsetDateTime?>,
+                    t7: String
                 ->
-                return@Function6 CombineResultEventHolder(t1, t2, t3, t4, t5, t6.firstOrNull())
+                return@Function7 CombineResultEventHolder(t1, t2, t3, t4, t5, t6.firstOrNull(), t7)
             }
         )
         .throttleLatest(DEFAULT_THROTTLE_TIMEOUT, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
-        .map { (event, showPlayedItems, showPartiallyPlayedItems, showFutureItems, notLoadedCount, oldestUpdate) ->
+        .map { (event, showPlayedItems, showPartiallyPlayedItems, showFutureItems, notLoadedCount, oldestUpdate, query) ->
             val streamItems = if (event is SuccessResultEvent || event is IdleEvent) {
-                feedDatabaseManager
+                val allItems = feedDatabaseManager
                     .getStreams(groupId, showPlayedItems, showPartiallyPlayedItems, showFutureItems)
                     .blockingGet(arrayListOf())
+                // SubsPipe: keep the smart search index up to date with the feed
+                SmartSearchIndexer.indexInBackground(application, allItems.map { it.stream })
+                SmartSearch.search(application, allItems, query)
             } else {
                 arrayListOf()
             }
@@ -116,7 +131,8 @@ class FeedViewModel(
         val t3: Boolean,
         val t4: Boolean,
         val t5: Long,
-        val t6: OffsetDateTime?
+        val t6: OffsetDateTime?,
+        val t7: String
     )
 
     private data class CombineResultDataHolder(
@@ -125,6 +141,14 @@ class FeedViewModel(
         val t3: Long,
         val t4: OffsetDateTime?
     )
+
+    /**
+     * SubsPipe: search the feed (your subscriptions only). Results are ranked by
+     * meaning with the on-device model, see [SmartSearch].
+     */
+    fun setSearchQuery(query: String) {
+        searchQuery.onNext(query.trim())
+    }
 
     fun setSaveShowPlayedItems(showPlayedItems: Boolean) {
         this.showPlayedItems.onNext(showPlayedItems)
