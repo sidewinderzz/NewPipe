@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.atomic.AtomicBoolean
 import org.jsoup.Jsoup
 import org.schabi.newpipe.NewPipeDatabase
+import org.schabi.newpipe.database.feed.model.FeedGroupEntity
 import org.schabi.newpipe.database.stream.model.StreamEntity
 import org.schabi.newpipe.extractor.stream.Description
 import org.schabi.newpipe.local.feed.FeedDatabaseManager
@@ -94,7 +95,7 @@ object SmartSearchIndexer {
                 SmartSearchStore.get(appContext).clearAiTags()
             }
             val streams = FeedDatabaseManager(appContext)
-                .getStreams(FeedDatabaseManager.GROUP_ALL_ID, true, true, true)
+                .getStreams(FeedGroupEntity.GROUP_ALL_ID, true, true, true)
                 .blockingGet(emptyList())
                 .map { it.stream }
             tagChannels(appContext, streams)
