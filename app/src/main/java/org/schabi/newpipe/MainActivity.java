@@ -83,6 +83,7 @@ import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
+import org.schabi.newpipe.subspipe.SubsPipeUpdater;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.KioskTranslator;
@@ -218,6 +219,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         final App app = App.getInstance();
+
+        // SubsPipe: look for a newer build on GitHub
+        SubsPipeUpdater.INSTANCE.checkInBackground(this, false);
 
         if (sharedPreferences.getBoolean(app.getString(R.string.update_app_key), false)
                 && sharedPreferences

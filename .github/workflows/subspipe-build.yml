@@ -74,11 +74,11 @@ jobs:
           path: out/*.apk
 
       - name: Publish release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/subspipe')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: subspipe-${{ github.run_number }}
           name: SubsPipe build ${{ github.run_number }}
-          body: Latest SubsPipe build from the dev branch. Download the .apk below and install it.
+          body: SubsPipe build ${{ github.run_number }} from ${{ github.ref_name }}. The app offers this update automatically, or download the .apk below.
           files: out/*.apk
           make_latest: true

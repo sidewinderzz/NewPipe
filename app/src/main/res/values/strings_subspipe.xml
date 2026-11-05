@@ -4,4 +4,10 @@
     <string name="subspipe_search_hint" translatable="false">Search your subscriptions by topic</string>
     <string name="subspipe_find_channels" translatable="false">Find channels</string>
     <string name="subspipe_find_channels_hint" translatable="false">Find channels to subscribe to</string>
+    <string name="subspipe_update_title" translatable="false">SubsPipe update available</string>
+    <string name="subspipe_update_message" translatable="false">Build %1$d is ready. Download and install it now? Your subscriptions and history are kept.</string>
+    <string name="subspipe_update_now" translatable="false">Update</string>
+    <string name="subspipe_update_later" translatable="false">Later</string>
+    <string name="subspipe_update_downloading" translatable="false">Downloading the update…</string>
+    <string name="subspipe_up_to_date" translatable="false">SubsPipe is up to date</string>
 </resources>
