@@ -386,6 +386,20 @@ public final class NavigationHelper {
                 .commit();
     }
 
+    /**
+     * SubsPipe: open a search that only finds channels to subscribe to.
+     *
+     * @param fragmentManager the fragment manager
+     * @param serviceId       the service to search on
+     */
+    public static void openChannelSearchFragment(final FragmentManager fragmentManager,
+                                                 final int serviceId) {
+        defaultTransaction(fragmentManager)
+                .replace(R.id.fragment_holder, SearchFragment.getChannelSearchInstance(serviceId))
+                .addToBackStack(SEARCH_FRAGMENT_TAG)
+                .commit();
+    }
+
     public static void expandMainPlayer(final Context context) {
         context.sendBroadcast(new Intent(VideoDetailFragment.ACTION_SHOW_MAIN_PLAYER));
     }

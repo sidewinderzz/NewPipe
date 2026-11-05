@@ -2,4 +2,6 @@
 <!-- SubsPipe-only strings -->
 <resources>
     <string name="subspipe_search_hint" translatable="false">Search your subscriptions</string>
+    <string name="subspipe_find_channels" translatable="false">Find channels</string>
+    <string name="subspipe_find_channels_hint" translatable="false">Find channels to subscribe to</string>
 </resources>
