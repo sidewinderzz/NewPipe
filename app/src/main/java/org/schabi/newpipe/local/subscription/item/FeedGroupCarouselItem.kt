@@ -69,7 +69,8 @@ class FeedGroupCarouselItem(
 
         val context = viewBinding.root.context
         carouselLayoutManager = if (listViewMode) {
-            LinearLayoutManager(context)
+            // SubsPipe: a single horizontal row of chips
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         } else {
             GridLayoutManager(context, getGridSpanCount(context, DeviceUtils.dpToPx(112, context)))
         }
