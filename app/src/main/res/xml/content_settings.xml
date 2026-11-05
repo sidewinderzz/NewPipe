@@ -150,7 +150,7 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="@string/feed_use_dedicated_fetch_method_key"
             android:summary="@string/feed_use_dedicated_fetch_method_summary"
             android:title="@string/feed_use_dedicated_fetch_method_title"

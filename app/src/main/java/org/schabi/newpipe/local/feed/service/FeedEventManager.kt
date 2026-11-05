@@ -19,6 +19,9 @@ object FeedEventManager {
         return eventsFlowable.filter { !ignoreUpstream.get() }
     }
 
+    /** SubsPipe: true while the feed is being refreshed. */
+    fun isLoading(): Boolean = processor.value is Event.ProgressEvent
+
     fun reset() {
         ignoreUpstream.set(true)
         postEvent(IdleEvent)

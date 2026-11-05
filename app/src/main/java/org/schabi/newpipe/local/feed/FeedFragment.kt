@@ -281,7 +281,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
             val usingDedicatedMethod = sharedPreferences
-                .getBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), false)
+                .getBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), true)
             val enableDisableButtonText = when {
                 usingDedicatedMethod -> R.string.feed_use_dedicated_fetch_method_disable_button
                 else -> R.string.feed_use_dedicated_fetch_method_enable_button
@@ -566,7 +566,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val isFastFeedModeEnabled = sharedPreferences.getBoolean(
             getString(R.string.feed_use_dedicated_fetch_method_key),
-            false
+            true
         )
 
         val builder = AlertDialog.Builder(requireContext())

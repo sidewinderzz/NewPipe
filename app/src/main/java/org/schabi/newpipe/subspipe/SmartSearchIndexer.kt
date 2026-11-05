@@ -14,6 +14,7 @@ import org.jsoup.Jsoup
 import org.schabi.newpipe.NewPipeDatabase
 import org.schabi.newpipe.database.stream.model.StreamEntity
 import org.schabi.newpipe.extractor.stream.Description
+import org.schabi.newpipe.local.feed.service.FeedEventManager
 import org.schabi.newpipe.util.ExtractorHelper
 
 /**
@@ -86,7 +87,9 @@ object SmartSearchIndexer {
         var consecutiveFailures = 0
         for (stream in streams) {
             if (fetched >= MAX_DESCRIPTION_FETCHES_PER_RUN ||
-                consecutiveFailures >= MAX_CONSECUTIVE_FAILURES
+                consecutiveFailures >= MAX_CONSECUTIVE_FAILURES ||
+                // never compete with a feed refresh for the network; carry on next time
+                FeedEventManager.isLoading()
             ) {
                 break
             }

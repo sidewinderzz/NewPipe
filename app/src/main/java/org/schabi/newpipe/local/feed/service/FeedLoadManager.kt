@@ -67,7 +67,7 @@ class FeedLoadManager(private val context: Context) {
         val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val useFeedExtractor = defaultSharedPreferences.getBoolean(
             context.getString(R.string.feed_use_dedicated_fetch_method_key),
-            false
+            true // SubsPipe: fast mode (one small RSS request per channel) by default
         )
 
         val outdatedThreshold = if (ignoreOutdatedThreshold) {
@@ -353,7 +353,7 @@ class FeedLoadManager(private val context: Context) {
         /**
          * How many extractions will be running in parallel.
          */
-        private const val PARALLEL_EXTRACTIONS = 3
+        private const val PARALLEL_EXTRACTIONS = 6 // SubsPipe: was 3
 
         /**
          * How many YouTube extractions to perform before waiting [DELAY_BETWEEN_BATCHES_MILLIS]
@@ -365,7 +365,7 @@ class FeedLoadManager(private val context: Context) {
          * Wait a random delay in this range once every [BATCH_SIZE] YouTube extractions to avoid
          * being rate limited
          */
-        private val DELAY_BETWEEN_BATCHES_MILLIS = (6000L..12000L)
+        private val DELAY_BETWEEN_BATCHES_MILLIS = (3000L..6000L) // SubsPipe: was 6-12 s
 
         /**
          * Number of items to buffer to mass-insert in the database.
