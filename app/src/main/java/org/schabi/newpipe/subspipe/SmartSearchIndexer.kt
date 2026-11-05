@@ -11,6 +11,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.atomic.AtomicBoolean
 import org.jsoup.Jsoup
+import org.schabi.newpipe.NewPipeDatabase
 import org.schabi.newpipe.database.stream.model.StreamEntity
 import org.schabi.newpipe.extractor.stream.Description
 import org.schabi.newpipe.util.ExtractorHelper
@@ -63,6 +64,11 @@ object SmartSearchIndexer {
         }
         val store = SmartSearchStore.get(context)
 
+        // 0. channel profiles: what each subscribed channel is about, from its name and
+        // "about" text (already stored with the subscription, so this is offline too).
+        // This lets "woodworking" find a woodworker's videos even when titles don't say so.
+        indexChannels(context, store)
+
         // 1. titles: quick and offline
         for (stream in streams) {
             if (store.get(stream.url) == null) {
@@ -104,6 +110,25 @@ object SmartSearchIndexer {
                 Log.w(TAG, "Could not fetch description for ${stream.url}", e)
             }
             Thread.sleep(DELAY_BETWEEN_FETCHES_MS)
+        }
+    }
+
+    private fun indexChannels(context: Context, store: SmartSearchStore) {
+        val subscriptions = try {
+            NewPipeDatabase.getInstance(context).subscriptionDAO().getAll().blockingFirst()
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not read subscriptions", e)
+            return
+        }
+        for (subscription in subscriptions) {
+            val url = subscription.url ?: continue
+            val text = "${subscription.name.orEmpty()}. ${subscription.description.orEmpty()}"
+                .take(MAX_DESCRIPTION_CHARS)
+            val hash = text.hashCode()
+            if (store.hasChannel(url, hash)) {
+                continue
+            }
+            SmartSearchEmbedder.embed(context, text)?.let { store.putChannel(url, hash, it) }
         }
     }
 
