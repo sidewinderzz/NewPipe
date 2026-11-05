@@ -40,8 +40,9 @@ configure<ApplicationExtension> {
     namespace = NEWPIPE_APPLICATION_ID_OLD
 
     defaultConfig {
-        applicationId = NEWPIPE_APPLICATION_ID_OLD
-        resValue("string", "app_name", "NewPipe")
+        // SubsPipe: own package ID so it installs alongside regular NewPipe
+        applicationId = SUBSPIPE_APPLICATION_ID
+        resValue("string", "app_name", "SubsPipe")
         minSdk {
             version = release(NEWPIPE_VERSION_SDK_MIN)
         }
@@ -57,6 +58,21 @@ configure<ApplicationExtension> {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // SubsPipe signing key, supplied by CI from the repository secrets
+        // SUBSPIPE_KEYSTORE_BASE64 and SUBSPIPE_KEYSTORE_PASSWORD (see subspipe-build.yml).
+        // A fixed key means each new APK installs as an update over the last one.
+        val keystorePath = System.getenv("SUBSPIPE_KEYSTORE_FILE")
+        if (!keystorePath.isNullOrEmpty() && file(keystorePath).exists()) {
+            create("subspipe") {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("SUBSPIPE_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("SUBSPIPE_KEY_ALIAS") ?: "subspipe"
+                keyPassword = System.getenv("SUBSPIPE_KEYSTORE_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             isDebuggable = true
@@ -64,17 +80,20 @@ configure<ApplicationExtension> {
             // suffix the app id and the app name with git branch name
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 applicationIdSuffix = ".debug"
-                resValue("string", "app_name", "NewPipe Debug")
+                resValue("string", "app_name", "SubsPipe Debug")
             } else {
                 applicationIdSuffix = ".debug.$normalizedWorkingBranch"
-                resValue("string", "app_name", "NewPipe $workingBranch")
+                resValue("string", "app_name", "SubsPipe $workingBranch")
             }
         }
 
         release {
+            // SubsPipe: sign with the fixed key when CI provides it; otherwise fall back
+            // to the debug key so the build still produces an installable APK
+            signingConfig = signingConfigs.findByName("subspipe") ?: signingConfigs.getByName("debug")
             System.getProperty("packageSuffix")?.let { suffix ->
                 applicationIdSuffix = suffix
-                resValue("string", "app_name", "NewPipe $suffix")
+                resValue("string", "app_name", "SubsPipe $suffix")
             }
             isMinifyEnabled = true
             isShrinkResources = true
@@ -92,10 +111,10 @@ configure<ApplicationExtension> {
             // suffix the app id and the app name with git branch name
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 applicationIdSuffix = ".continuous"
-                resValue("string", "app_name", "NewPipe Continuous")
+                resValue("string", "app_name", "SubsPipe Continuous")
             } else {
                 applicationIdSuffix = ".continuous.$normalizedWorkingBranch"
-                resValue("string", "app_name", "NewPipe $workingBranch")
+                resValue("string", "app_name", "SubsPipe $workingBranch")
             }
         }
     }

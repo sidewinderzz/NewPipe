@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
 
+    /** SubsPipe: hide Trending and the other kiosks from the drawer. */
+    private static final boolean SHOW_KIOSKS_IN_DRAWER = false;
+
     private static final int ITEM_ID_SUBSCRIPTIONS = -1;
     private static final int ITEM_ID_FEED = -2;
     private static final int ITEM_ID_BOOKMARKS = -3;
@@ -299,6 +302,9 @@ public class MainActivity extends AppCompatActivity {
         int kioskMenuItemId = 0;
 
         for (final String ks : service.getKioskList().getAvailableKiosks()) {
+            if (!SHOW_KIOSKS_IN_DRAWER) {
+                break;
+            }
             drawerLayoutBinding.navigation.getMenu()
                     .add(R.id.menu_kiosks_group, kioskMenuItemId, 0, KioskTranslator
                             .getTranslatedKioskName(ks, this))

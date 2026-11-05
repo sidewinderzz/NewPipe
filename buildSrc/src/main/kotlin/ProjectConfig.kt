@@ -13,3 +13,6 @@ const val NEWPIPE_VERSION_NAME = "0.29.1"
 
 const val NEWPIPE_APPLICATION_ID_OLD = "org.schabi.newpipe"
 const val NEWPIPE_APPLICATION_ID_NEW = "net.newpipe.app"
+
+// SubsPipe (subscriptions-only fork)
+const val SUBSPIPE_APPLICATION_ID = "com.sidewinderzz.subspipe"

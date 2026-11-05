@@ -1,0 +1,77 @@
+# SubsPipe: builds the signed APK on every push.
+# Download it from the run's "Artifacts" section, or (for pushes to dev)
+# from the Releases page of the repository.
+name: Build SubsPipe APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - subspipe
+  pull_request:
+    branches:
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: "temurin"
+          cache: 'gradle'
+
+      # Optional: add the repository secrets SUBSPIPE_KEYSTORE_BASE64 and
+      # SUBSPIPE_KEYSTORE_PASSWORD so every build is signed with the same key
+      # (then new APKs install as updates). Without them the debug key is used.
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.SUBSPIPE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/subspipe.jks"
+            echo "SUBSPIPE_KEYSTORE_FILE=$RUNNER_TEMP/subspipe.jks" >> "$GITHUB_ENV"
+            echo "Using the SubsPipe signing key"
+          else
+            echo "::warning::No SUBSPIPE_KEYSTORE_BASE64 secret, signing with a temporary debug key"
+          fi
+
+      - name: Build release APK
+        env:
+          SUBSPIPE_KEYSTORE_PASSWORD: ${{ secrets.SUBSPIPE_KEYSTORE_PASSWORD }}
+        run: >
+          ./gradlew assembleRelease --stacktrace
+          -DskipFormatKtlint
+          -DversionCodeOverride=$((100000 + ${{ github.run_number }}))
+
+      - name: Rename APK
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/release/*.apk "out/SubsPipe-${{ github.run_number }}.apk"
+          ls -la out
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: SubsPipe-${{ github.run_number }}
+          path: out/*.apk
+
+      - name: Publish release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: subspipe-${{ github.run_number }}
+          name: SubsPipe build ${{ github.run_number }}
+          body: Latest SubsPipe build from the dev branch. Download the .apk below and install it.
+          files: out/*.apk
+          make_latest: true

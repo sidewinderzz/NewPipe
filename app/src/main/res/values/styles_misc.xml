@@ -50,6 +50,12 @@
         <item name="colorAccent">@color/dark_settings_accent_color</item>
     </style>
 
+    <!-- SubsPipe: rounded video thumbnails -->
+    <style name="SubsPipeRoundedThumbnail">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
     <style name="PlayQueueItemTextTheme">
         <item name="android:textAppearanceLarge">@style/PlayQueueItemTitle</item>
         <item name="android:textAppearanceSmall">@style/PlayQueueItemSubtitle</item>

@@ -11,10 +11,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.preference.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.functions.Function6
+import io.reactivex.rxjava3.functions.Function7
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.time.OffsetDateTime
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import org.schabi.newpipe.App
 import org.schabi.newpipe.R
@@ -52,6 +53,14 @@ class FeedViewModel(
         .startWithItem(initialShowFutureItems)
         .distinctUntilChanged()
 
+    /** SubsPipe: text typed into the feed search box; empty means no filtering. */
+    private val searchQuery = BehaviorProcessor.createDefault("")
+    private val searchQueryFlowable = searchQuery.distinctUntilChanged()
+
+    /** The query currently applied to the feed, so the search box can be restored. */
+    val currentSearchQuery: String
+        get() = searchQuery.value.orEmpty()
+
     private val mutableStateLiveData = MutableLiveData<FeedState>()
     val stateLiveData: LiveData<FeedState> = mutableStateLiveData
 
@@ -63,26 +72,30 @@ class FeedViewModel(
             showFutureItemsFlowable,
             feedDatabaseManager.notLoadedCount(groupId),
             feedDatabaseManager.oldestSubscriptionUpdate(groupId),
+            searchQueryFlowable,
 
-            Function6 {
+            Function7 {
                     t1: FeedEventManager.Event,
                     t2: Boolean,
                     t3: Boolean,
                     t4: Boolean,
                     t5: Long,
-                    t6: List<OffsetDateTime?>
+                    t6: List<OffsetDateTime?>,
+                    t7: String
                 ->
-                return@Function6 CombineResultEventHolder(t1, t2, t3, t4, t5, t6.firstOrNull())
+                return@Function7 CombineResultEventHolder(t1, t2, t3, t4, t5, t6.firstOrNull(), t7)
             }
         )
         .throttleLatest(DEFAULT_THROTTLE_TIMEOUT, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
-        .map { (event, showPlayedItems, showPartiallyPlayedItems, showFutureItems, notLoadedCount, oldestUpdate) ->
+        .map { (event, showPlayedItems, showPartiallyPlayedItems, showFutureItems, notLoadedCount, oldestUpdate, query) ->
             val streamItems = if (event is SuccessResultEvent || event is IdleEvent) {
+                val terms = searchTerms(query)
                 feedDatabaseManager
                     .getStreams(groupId, showPlayedItems, showPartiallyPlayedItems, showFutureItems)
                     .blockingGet(arrayListOf())
+                    .filter { matchesSearch(it, terms) }
             } else {
                 arrayListOf()
             }
@@ -116,7 +129,8 @@ class FeedViewModel(
         val t3: Boolean,
         val t4: Boolean,
         val t5: Long,
-        val t6: OffsetDateTime?
+        val t6: OffsetDateTime?,
+        val t7: String
     )
 
     private data class CombineResultDataHolder(
@@ -125,6 +139,14 @@ class FeedViewModel(
         val t3: Long,
         val t4: OffsetDateTime?
     )
+
+    /**
+     * SubsPipe: filter the feed (your subscriptions only) by words in the
+     * video title or channel name. Every word has to match, in any order.
+     */
+    fun setSearchQuery(query: String) {
+        searchQuery.onNext(query.trim())
+    }
 
     fun setSaveShowPlayedItems(showPlayedItems: Boolean) {
         this.showPlayedItems.onNext(showPlayedItems)
@@ -154,6 +176,19 @@ class FeedViewModel(
     fun getShowFutureItemsFromPreferences() = getShowFutureItemsFromPreferences(application)
 
     companion object {
+        private fun searchTerms(query: String): List<String> = query
+            .lowercase(Locale.getDefault())
+            .split(Regex("\\s+"))
+            .filter { it.isNotBlank() }
+
+        private fun matchesSearch(item: StreamWithState, terms: List<String>): Boolean {
+            if (terms.isEmpty()) {
+                return true
+            }
+            val haystack = "${item.stream.title} ${item.stream.uploader}".lowercase(Locale.getDefault())
+            return terms.all { haystack.contains(it) }
+        }
+
         private fun getShowPlayedItemsFromPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean(context.getString(R.string.feed_show_watched_items_key), true)
 

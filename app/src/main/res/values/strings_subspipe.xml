@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SubsPipe-only strings -->
+<resources>
+    <string name="subspipe_search_hint" translatable="false">Search your subscriptions</string>
+</resources>
