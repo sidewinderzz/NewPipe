@@ -42,7 +42,7 @@ configure<ApplicationExtension> {
     defaultConfig {
         // SubsPipe: own package ID so it installs alongside regular NewPipe
         applicationId = SUBSPIPE_APPLICATION_ID
-        resValue("string", "app_name", "SubsPipe")
+        resValue("string", "app_name", "Subbed")
         minSdk {
             // SubsPipe: Android 7+
             version = release(SUBSPIPE_VERSION_SDK_MIN)
@@ -53,9 +53,10 @@ configure<ApplicationExtension> {
 
         versionCode = System.getProperty("versionCodeOverride")?.toInt() ?: NEWPIPE_VERSION_CODE
 
-        // SubsPipe: show the build number, e.g. "SubsPipe 19 (0.29.1)"
+        // SubsPipe: show the build number, e.g. "Subbed 19 (0.29.1)". The app was renamed from SubsPipe to Subbed;
+        // the package ID stays the same so updates install over older builds
         versionName = System.getProperty("versionCodeOverride")?.toIntOrNull()
-            ?.let { "SubsPipe ${it - 100000} ($NEWPIPE_VERSION_NAME)" } ?: NEWPIPE_VERSION_NAME
+            ?.let { "Subbed ${it - 100000} ($NEWPIPE_VERSION_NAME)" } ?: NEWPIPE_VERSION_NAME
         System.getProperty("versionNameSuffix")?.let { versionNameSuffix = it }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -83,10 +84,10 @@ configure<ApplicationExtension> {
             // suffix the app id and the app name with git branch name
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 applicationIdSuffix = ".debug"
-                resValue("string", "app_name", "SubsPipe Debug")
+                resValue("string", "app_name", "Subbed Debug")
             } else {
                 applicationIdSuffix = ".debug.$normalizedWorkingBranch"
-                resValue("string", "app_name", "SubsPipe $workingBranch")
+                resValue("string", "app_name", "Subbed $workingBranch")
             }
         }
 
@@ -96,7 +97,7 @@ configure<ApplicationExtension> {
             signingConfig = signingConfigs.findByName("subspipe") ?: signingConfigs.getByName("debug")
             System.getProperty("packageSuffix")?.let { suffix ->
                 applicationIdSuffix = suffix
-                resValue("string", "app_name", "SubsPipe $suffix")
+                resValue("string", "app_name", "Subbed $suffix")
             }
             isMinifyEnabled = true
             isShrinkResources = true
@@ -114,10 +115,10 @@ configure<ApplicationExtension> {
             // suffix the app id and the app name with git branch name
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 applicationIdSuffix = ".continuous"
-                resValue("string", "app_name", "SubsPipe Continuous")
+                resValue("string", "app_name", "Subbed Continuous")
             } else {
                 applicationIdSuffix = ".continuous.$normalizedWorkingBranch"
-                resValue("string", "app_name", "SubsPipe $workingBranch")
+                resValue("string", "app_name", "Subbed $workingBranch")
             }
         }
     }

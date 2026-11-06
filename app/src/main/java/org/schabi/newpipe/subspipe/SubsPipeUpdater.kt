@@ -126,7 +126,7 @@ object SubsPipeUpdater {
         val context = activity.applicationContext
         val downloadManager = ContextCompat.getSystemService(context, DownloadManager::class.java)
             ?: return
-        val fileName = "SubsPipe-${release.buildNumber}.apk"
+        val fileName = "Subbed-${release.buildNumber}.apk"
         val request = DownloadManager.Request(Uri.parse(release.apkUrl))
             .setTitle(fileName)
             .setMimeType(APK_MIME)
