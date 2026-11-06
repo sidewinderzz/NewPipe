@@ -1,7 +1,7 @@
 # SubsPipe: builds the signed APK on every push.
 # Download it from the run's "Artifacts" section, or (for pushes to dev)
 # from the Releases page of the repository.
-name: Build SubsPipe APK
+name: Build Subbed APK
 
 on:
   workflow_dispatch:
@@ -58,13 +58,13 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/release/*.apk "out/SubsPipe-${{ github.run_number }}.apk"
+          cp app/build/outputs/apk/release/*.apk "out/Subbed-${{ github.run_number }}.apk"
           ls -la out
 
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
-          name: SubsPipe-${{ github.run_number }}
+          name: Subbed-${{ github.run_number }}
           path: out/*.apk
 
       - name: Publish release
@@ -72,7 +72,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: subspipe-${{ github.run_number }}
-          name: SubsPipe build ${{ github.run_number }}
-          body: SubsPipe build ${{ github.run_number }} from ${{ github.ref_name }}. The app offers this update automatically, or download the .apk below.
+          name: Subbed build ${{ github.run_number }}
+          body: Subbed build ${{ github.run_number }} from ${{ github.ref_name }}. The app offers this update automatically, or download the .apk below.
           files: out/*.apk
           make_latest: true

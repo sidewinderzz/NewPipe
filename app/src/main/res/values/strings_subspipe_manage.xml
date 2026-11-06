@@ -15,7 +15,7 @@
     <string name="subspipe_import_csv" translatable="false">Import YouTube CSV</string>
     <string name="subspipe_import_csv_summary" translatable="false">The subscriptions.csv file from Google Takeout. Channels you already follow are skipped.</string>
     <string name="subspipe_import_backup" translatable="false">Restore a backup</string>
-    <string name="subspipe_import_backup_summary" translatable="false">A .json subscriptions export from SubsPipe or NewPipe.</string>
+    <string name="subspipe_import_backup_summary" translatable="false">A .json subscriptions export from Subbed or NewPipe.</string>
     <string name="subspipe_takeout_help" translatable="false">To get the CSV: open takeout.google.com, choose only YouTube, under \"All YouTube data included\" pick just subscriptions, and export.</string>
     <string name="subspipe_open_takeout" translatable="false">Open Google Takeout</string>
     <string name="subspipe_subscription_count" translatable="false">You follow %1$d channels</string>

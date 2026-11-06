@@ -4,13 +4,13 @@
     <string name="subspipe_search_hint" translatable="false">Search your subscriptions by topic</string>
     <string name="subspipe_find_channels" translatable="false">Find channels</string>
     <string name="subspipe_find_channels_hint" translatable="false">Find channels to subscribe to</string>
-    <string name="subspipe_update_title" translatable="false">SubsPipe update available</string>
+    <string name="subspipe_update_title" translatable="false">Subbed update available</string>
     <string name="subspipe_update_message" translatable="false">Build %1$d is ready. Download and install it now? Your subscriptions and history are kept.</string>
     <string name="subspipe_update_now" translatable="false">Update</string>
     <string name="subspipe_update_later" translatable="false">Later</string>
     <string name="subspipe_update_downloading" translatable="false">Downloading the update…</string>
     <string name="subspipe_update_download_failed" translatable="false">The update didn\'t download. Try again from Settings > Updates.</string>
-    <string name="subspipe_up_to_date" translatable="false">SubsPipe is up to date</string>
+    <string name="subspipe_up_to_date" translatable="false">Subbed is up to date</string>
     <string name="subspipe_new_group" translatable="false">New group</string>
     <string name="subspipe_accent_key" translatable="false">subspipe_accent</string>
     <string name="subspipe_accent_title" translatable="false">Highlight color</string>
@@ -31,7 +31,7 @@
         <item>Purple</item>
         <item>Teal</item>
     </string-array>
-    <string name="subspipe_manual_update_summary">You have %1$s. Tap to check for a newer SubsPipe build.</string>
+    <string name="subspipe_manual_update_summary">You have %1$s. Tap to check for a newer Subbed build.</string>
     <string name="subspipe_update_failed">Couldn\'t check for updates. Try again in a minute.</string>
     <string name="subspipe_sort_newest">Sort: newest first</string>
     <string name="subspipe_sort_az">Sort: A to Z</string>
